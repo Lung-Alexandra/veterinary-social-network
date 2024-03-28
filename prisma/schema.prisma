@@ -1,0 +1,52 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_LINK")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id         Int     @id @default(autoincrement())
+  email      String  @unique
+  password   String
+  role       Role    @default(USER)
+  name       String
+  bio        String?
+  profilePic String?
+
+  posts    Post[] // No @relation needed on User for posts (implicit)
+  comments Comment[] // No @relation needed on User for comments (implicit)
+}
+
+model Post {
+  id        Int       @id @default(autoincrement())
+  title     String
+  content   String
+  type      PostType
+  createdAt DateTime  @default(now())
+  authorId  Int
+  author    User      @relation(fields: [authorId], references: [id])
+  comments  Comment[] //@relation(fields: [id], references: [postId])
+}
+
+enum PostType {
+  TEXT
+  IMAGE
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id])
+  postId    Int
+  post      Post     @relation(fields: [postId], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
