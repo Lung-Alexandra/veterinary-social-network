@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Comments</title>
+</head>
+<body>
+
+{% if comments.length === 0 %}
+<p> no comments yet</p>
+{% else %}
+    {% for comment in comments %}
+    <div style="display:flex;flex-direction:column;border:1px solid black; margin: 10px;">
+        <p>{{ comment.content }}</p>
+        <p>Data: {{comment.createdAt.toDateString() }} {{ comment.createdAt.getHours() }}:{{ comment.createdAt.getMinutes() }}</p>
+    </div>
+    {% endfor %}
+{% endif %}
+<button type="submit"><a href="/">Back</a></button>
+
+</body>

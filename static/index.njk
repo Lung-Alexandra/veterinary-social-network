@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+{% if auth %}
+<button type="submit"><a href="/post">Create Post</a></button>
+<button type="submit"><a href="/logout">Logout</a></button>
+{% else %}
+<button type="submit"><a href="/login">Login</a></button>
+{% endif %}
+{% for post in posts %}
+<div style="border: 1px solid black;margin :10px;">
+    <p>Data: {{post.createdAt.toDateString() }} {{ post.createdAt.getHours() }}:{{ post.createdAt.getMinutes() }}</p>
+    <p>Author: {{post.author.name}}</p>
+    <p>Titlu : {{post.title}}</p>
+    <p>Continut : {{post.content}}</p>
+    <div style="display: flex; flex-direction: row;justify-content: space-evenly">
+        <form action="/post/{{post.id}}/comments" method="get">
+            <button type="submit">View comments</button>
+        </form>
+        {% if auth %}
+        <form action="/post/{{post.id}}/comment" method="get">
+            <button type="submit">Add comment</button>
+        </form>
+            {% if postAuth ==post.authorId %}
+            <form action="/post/{{post.id}}" method="get">
+                <button type="submit">Edit post</button>
+            </form>
+            <form action="/post/{{post.id}}" method="post">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit">Delete post</button>
+            </form>
+            {%endif %}
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+</body>
