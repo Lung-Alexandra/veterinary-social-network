@@ -145,9 +145,16 @@ app.get('/logout', (req, res) => {
 
 app.get('/', async (req, res) => {
     try {
-        const {page = 1, perPage = 3, sortOption, authorFilter} = req.query;
+        const {page = 1, sortOption, authorFilter} = req.query;
+        const perPage = 3
         const offset = (page - 1) * perPage;
-        const totalCount = await prismaClient.post.count();
+        const totalCount = await prismaClient.post.count({
+            where: {
+                author: authorFilter ? {
+                    name: { contains: authorFilter }
+                } : undefined
+            }
+        });
         const totalPages = Math.ceil(totalCount / perPage);
         let posts = await prismaClient.post.findMany({
             include: {author: true, tags: true},
@@ -163,7 +170,16 @@ app.get('/', async (req, res) => {
             take: perPage
         });
         // console.log(req.session.userId)
-        res.render('index.njk', {posts: posts, auth: isLogin(req),  currentPage: parseInt(page) ,totalPages, userId: req.session.userId, role: req.session.role});
+        res.render('index.njk', {
+            posts: posts,
+            auth: isLogin(req),
+            currentPage: parseInt(page),
+            sortOption,
+            authorFilter,
+            totalPages,
+            userId: req.session.userId,
+            role: req.session.role
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({message: 'Error fetching posts!'});
@@ -324,7 +340,7 @@ app.put('/post/:id', authenticateJWT, async (req, res) => {
                 tags: {connect: tagRecords.map(tag => ({id: tag.id}))},
                 type
             },
-            include:{ tags:true}
+            include: {tags: true}
         });
         if (!post) {
             return res.status(404).json({message: 'Post not found!'});
