@@ -16,6 +16,8 @@
 {% endif %}
     <label for="title">Title:</label><br>
     <input type="text" id="title" name="title" value="{{ post.title if post else '' }}"><br>
+    <label for="tags">Tags:</label>
+    <input type="text" id="tags" name="tags" placeholder="Enter tags separated by comma"><br>
     <label for="content">Content:</label><br>
     <textarea id="content" name="content">{{ post.content if post else '' }}</textarea><br>
     <label for="type">Type:</label><br>
@@ -25,4 +27,5 @@
     </select><br>
     <button type="submit">{{ "Modify Post" if method else "Create Post" }}</button>
 </form>
+<button type="submit"><a href="/">Back</a></button>
 </body>

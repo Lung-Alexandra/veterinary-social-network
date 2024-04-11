@@ -1,0 +1,64 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id Int [pk, increment]
+  email String [unique, not null]
+  bio String
+  name String [not null]
+  password String [not null]
+  profilePic String
+  role Role [not null, default: 'USER']
+  comments Comment [not null]
+  posts Post [not null]
+}
+
+Table Post {
+  id Int [pk, increment]
+  title String [not null]
+  content String [not null]
+  authorId Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  type PostType [not null]
+  comments Comment [not null]
+  author User [not null]
+  tags Tag [not null]
+}
+
+Table Tag {
+  id Int [pk, increment]
+  name String [unique, not null]
+  posts Post [not null]
+}
+
+Table Comment {
+  id Int [pk, increment]
+  content String [not null]
+  authorId Int [not null]
+  postId Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  author User [not null]
+  post Post [not null]
+}
+
+Table PostToTag {
+  tagsId Int [ref: > Tag.id]
+  postsId Int [ref: > Post.id]
+}
+
+Enum PostType {
+  TEXT
+  IMAGE
+}
+
+Enum Role {
+  USER
+  ADMIN
+}
+
+Ref: Post.authorId > User.id
+
+Ref: Comment.authorId > User.id
+
+Ref: Comment.postId > Post.id

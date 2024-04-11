@@ -5,6 +5,21 @@
     <title>Title</title>
 </head>
 <body>
-
+{% for user in users %}
+<div style="display: flex;flex-direction: column; border: 1px solid black;">
+    <div style="display: flex;flex-direction: column; ">
+        <p> Name: {{user.name}}</p>
+        <p> Email: {{user.email}}</p>
+        <p> Role: {{user.role}}</p>
+    </div>
+    <div style="display: flex;flex-direction: row;">
+        <form action="/user/{{user.id}}" method="post">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit">Delete user</button>
+        </form>
+    </div>
+</div>
+{% endfor %}
+<button type="submit"><a href="/">Back</a></button>
 </body>
 </html>

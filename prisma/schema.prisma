@@ -1,49 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DB_LINK")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model User {
-  id         Int     @id @default(autoincrement())
-  email      String  @unique
-  password   String
-  role       Role    @default(USER)
-  name       String
+  id         Int       @id @default(autoincrement())
+  email      String    @unique
   bio        String?
+  name       String
+  password   String
   profilePic String?
-
-  posts    Post[] // No @relation needed on User for posts (implicit)
-  comments Comment[] // No @relation needed on User for comments (implicit)
+  role       Role      @default(USER)
+  comments   Comment[]
+  posts      Post[]
 }
 
 model Post {
   id        Int       @id @default(autoincrement())
   title     String
   content   String
-  type      PostType
-  createdAt DateTime  @default(now())
   authorId  Int
+  createdAt DateTime  @default(now())
+  type      PostType
+  comments  Comment[]
   author    User      @relation(fields: [authorId], references: [id])
-  comments  Comment[] //@relation(fields: [id], references: [postId])
+  tags      Tag[]     @relation("PostToTag")
 }
 
-enum PostType {
-  TEXT
-  IMAGE
+model Tag {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  posts Post[] @relation("PostToTag")
 }
 
 model Comment {
   id        Int      @id @default(autoincrement())
   content   String
-  createdAt DateTime @default(now())
   authorId  Int
-  author    User     @relation(fields: [authorId], references: [id])
   postId    Int
+  createdAt DateTime @default(now())
+  author    User     @relation(fields: [authorId], references: [id])
   post      Post     @relation(fields: [postId], references: [id])
+}
+
+enum PostType {
+  TEXT
+  IMAGE
 }
 
 enum Role {

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+<div style="display: flex;flex-direction: column; border: 1px solid black;">
+    <p> Name: {{user.name}}</p>
+    <p> Email: {{user.email}}</p>
+    <p> Role: {{user.role}}</p>
+    <p> Bio: {{user.bio}} </p>
+</div>
+<button type="submit"><a href="/">Back</a></button>
+<div style="display: flex;flex-direction: row;">
+    <div style="display: flex;flex-direction: row;">
+        <form action="/editprofile/{{user.id}}" method="get">
+            <button type="submit">Edit profile</button>
+        </form>
+    </div>
+    <form action="/user/{{user.id}}" method="post">
+        <input type="hidden" name="_method" value="DELETE">
+        <button type="submit">Delete account</button>
+    </form>
+</div>
+</body>
