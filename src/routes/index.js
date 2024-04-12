@@ -412,6 +412,37 @@ app.post('/post/:postId/comment', authenticateJWT, async (req, res) => {
         res.status(500).json({message: 'Error creating comment!'});
     }
 });
+app.delete('/post/:postId/comment/:commentId', authenticateJWT, async (req, res) => {
+    const { postId, commentId } = req.params;
+    try {
+
+        const comment = await prismaClient.comment.findUnique({
+            where: {
+                id: parseInt(commentId)
+            }
+        });
+        if (!comment) {
+            return res.status(404).json({ message: 'Comment not found' });
+        }
+
+        // Check if the user is authorized to delete the comment
+        if (comment.authorId !== req.session.userId || req.session.role !== "ADMIN") {
+            return res.status(403).json({ message: 'Unauthorized to delete this comment' });
+        }
+
+        // Delete the comment
+        await prismaClient.comment.delete({
+            where: {
+                id: parseInt(commentId)
+            }
+        });
+
+        res.redirect(`/post/${postId}/comments`);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error deleting comment' });
+    }
+});
 
 // Read all comments for a specific post
 app.get('/post/:postId/comments', async (req, res) => {
