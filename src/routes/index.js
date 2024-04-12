@@ -284,8 +284,8 @@ app.post('/post', authenticateJWT, async (req, res) => {
     try {
         // console.log(req.session.userId)
         const {title, content, tags, type} = req.body;
-        const tagNames = tags.split(',').map(tag => tag.trim());
-
+        const tagNames = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "" && tag !== undefined);
+        // console.log(tagNames);
         const tagRecords = await Promise.all(tagNames.map(async tagName => {
             return prismaClient.tag.upsert({
                 where: {name: tagName},
@@ -319,7 +319,7 @@ app.get('/post/:id', async (req, res) => {
     try {
         const post = await prismaClient.post.findUnique({
             where: {id: parseInt(id)},
-            include: {author: true},
+            include: {author: true, tags:true},
         });
         if (!post) {
             return res.status(404).json({message: 'Post not found!'});
@@ -336,8 +336,8 @@ app.put('/post/:id', authenticateJWT, async (req, res) => {
     const {id} = req.params;
     const {title, content, tags, type} = req.body;
     try {
-        const tagNames = tags.split(',').map(tag => tag.trim());
-        console.log(tags)
+        const tagNames = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "" && tag !== undefined);
+        // console.log(tags)
         const tagRecords = await Promise.all(tagNames.map(async tagName => {
             return prismaClient.tag.upsert({
                 where: {name: tagName},
@@ -393,6 +393,25 @@ app.get('/post/:postId/comment', authenticateJWT, async (req, res) => {
         res.status(500).json({message: 'Error fetching post for comment form!'});
     }
 });
+// Read a specific comment by ID
+app.get('/post/:postId/comment/:commentId', async (req, res) => {
+    const { postId, commentId } = req.params;
+    try {
+        const comment = await prismaClient.comment.findUnique({
+            where: {
+                id: parseInt(commentId)
+            }
+        });
+        if (!comment) {
+            return res.status(404).json({ message: 'Comment not found' });
+        }
+        res.render("addcomm.njk", {postId: postId, comment:comment, method: "put"})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Error fetching post!'});
+    }
+});
+
 // Create a comment for a specific post
 app.post('/post/:postId/comment', authenticateJWT, async (req, res) => {
     const {postId} = req.params;
@@ -412,6 +431,44 @@ app.post('/post/:postId/comment', authenticateJWT, async (req, res) => {
         res.status(500).json({message: 'Error creating comment!'});
     }
 });
+
+// Update a comment
+app.put('/post/:postId/comment/:commentId', authenticateJWT, async (req, res) => {
+    const { postId, commentId } = req.params;
+    const { content } = req.body;
+    try {
+        let comment = await prismaClient.comment.findUnique({
+            where: {
+                id: parseInt(commentId)
+            }
+        });
+        if (!comment) {
+            return res.status(404).json({ message: 'Comment not found' });
+        }
+
+        // Check if the user is authorized to update the comment
+        if (comment.authorId !== req.session.userId || req.session.role !== "ADMIN") {
+            return res.status(403).json({ message: 'Unauthorized to update this comment' });
+        }
+
+        // Update the comment
+        await prismaClient.comment.update({
+            where: {
+                id: parseInt(commentId)
+            },
+            data: {
+                content
+            }
+        });
+
+        res.redirect(`/post/${postId}/comments`);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error updating comment' });
+    }
+});
+
+
 app.delete('/post/:postId/comment/:commentId', authenticateJWT, async (req, res) => {
     const { postId, commentId } = req.params;
     try {

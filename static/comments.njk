@@ -18,10 +18,10 @@
 <div style="display: flex; flex-direction: row;justify-content: space-evenly">
     {% if auth %}
         {% if userId == comment.authorId or role == "ADMIN" %}
-        <form action="/comment/{{comment.id}}" method="get">
+        <form action="/post/{{comment.postId}}/comment/{{comment.id}}" method="get">
             <button type="submit">Edit comment</button>
         </form>
-        <form action="/comment/{{comment.id}}" method="post">
+        <form action="/post/{{comment.postId}}/comment/{{comment.id}}" method="post">
             <input type="hidden" name="_method" value="DELETE">
             <button type="submit">Delete comment</button>
         </form>

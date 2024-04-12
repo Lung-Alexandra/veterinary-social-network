@@ -5,8 +5,17 @@
     <title>Add comment</title>
 </head>
 <body>
-<form action="/post/{{postId}}/comment" method="POST">
-    <textarea name="content" placeholder="Enter your comment"></textarea>
+{% if method %}
+<h1>Modify Comment</h1>
+<form action="/post/{{postId}}/comment/{{comment.id}}" method="POST">
+<input type="hidden" name="_method" value="PUT">
+{% else %}
+<h1>Create a Comment</h1>
+<form action="/post/{{postId}}/comment/{{comment.id}}" method="POST">
+{% endif %}
+
+    <textarea name="content" placeholder="Enter your comment" >{{ comment.content if comment else '' }}</textarea>
     <button type="submit">Submit</button>
 </form>
+<button type="submit"><a href="/">Back</a></button>
 </body>
