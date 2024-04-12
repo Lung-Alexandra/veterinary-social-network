@@ -10,9 +10,10 @@
 {% else %}
 {% for comment in comments %}
 <div style="display:flex;flex-direction:column;border:1px solid black; margin: 10px;">
-    <p>{{ comment.content }}</p>
+    <p>{{ comment.author.name }}</p>
     <p>Data: {{comment.createdAt.toDateString() }} {{ comment.createdAt.getHours() }}:{{ comment.createdAt.getMinutes()
         }}</p>
+    <p>{{ comment.content }}</p>
 </div>
 
 <div style="display: flex; flex-direction: row;justify-content: space-evenly">

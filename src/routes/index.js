@@ -394,7 +394,7 @@ app.get('/post/:postId/comment', authenticateJWT, async (req, res) => {
     }
 });
 // Read a specific comment by ID
-app.get('/post/:postId/comment/:commentId', async (req, res) => {
+app.get('/post/:postId/comment/:commentId', authenticateJWT, async (req, res) => {
     const { postId, commentId } = req.params;
     try {
         const comment = await prismaClient.comment.findUnique({
@@ -447,7 +447,7 @@ app.put('/post/:postId/comment/:commentId', authenticateJWT, async (req, res) =>
         }
 
         // Check if the user is authorized to update the comment
-        if (comment.authorId !== req.session.userId || req.session.role !== "ADMIN") {
+        if (comment.authorId !== req.session.userId && req.session.role !== "ADMIN") {
             return res.status(403).json({ message: 'Unauthorized to update this comment' });
         }
 
@@ -483,7 +483,7 @@ app.delete('/post/:postId/comment/:commentId', authenticateJWT, async (req, res)
         }
 
         // Check if the user is authorized to delete the comment
-        if (comment.authorId !== req.session.userId || req.session.role !== "ADMIN") {
+        if (comment.authorId !== req.session.userId && req.session.role !== "ADMIN") {
             return res.status(403).json({ message: 'Unauthorized to delete this comment' });
         }
 
@@ -507,6 +507,7 @@ app.get('/post/:postId/comments', async (req, res) => {
     try {
         const comments = await prismaClient.comment.findMany({
             where: {postId: parseInt(postId)},
+            include:{author:true}
         });
         res.render('comments.njk', {
             comments: comments,
