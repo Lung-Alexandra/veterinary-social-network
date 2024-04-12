@@ -1,4 +1,4 @@
-const prismacli = require('@prisma/client');
+const prismacli =require('@prisma/client');
 
 const prisma= new prismacli.PrismaClient();
 
