@@ -6,16 +6,16 @@
 </head>
 <body>
 {% if auth %}
-<div style="display: flex;flex-direction: row; justify-content: space-between;">
-    <button type="submit"><a href="/logout">Logout</a></button>
-    <button type="submit"><a href="/post">Create post</a></button>
-    {% if role == "ADMIN" %}
-    <button type="submit"><a href="/users">Users</a></button>
-    {% endif %}
-    <button type="submit"><a href="/user/{{userId}}">View profile</a></button>
-</div>
+    <div style="display: flex;flex-direction: row; justify-content: space-between;">
+        <button type="submit"><a href="/logout">Logout</a></button>
+        <button type="submit"><a href="/post">Create post</a></button>
+        {% if role == "ADMIN" %}
+            <button type="submit"><a href="/users">Users</a></button>
+        {% endif %}
+        <button type="submit"><a href="/user/{{ userId }}">View profile</a></button>
+    </div>
 {% else %}
-<button type="submit"><a href="/login">Login</a></button>
+    <button type="submit"><a href="/login">Login</a></button>
 {% endif %}
 <form id="sortForm" method="get">
     <select name="sortOption" onchange="this.form.submit()">
@@ -27,59 +27,66 @@
     <input type="text" name="authorFilter" placeholder="Filtrare dupa autor" oninput="delayedSubmit(this)">
 </form>
 {% if posts.length %}
-{% for post in posts %}
-<div style="border: 1px solid black;margin :10px;">
-    <p>Data: {{post.createdAt.toDateString() }} {{ post.createdAt.getHours() }}:{{ post.createdAt.getMinutes() }}</p>
-    <p>Author: {{post.author.name}}</p>
-    <p>Titlu : {{post.title}}</p>
-    {% if post.tags.length %}
-    <p>Tags:
-        {% for tag in post.tags %}
-        {{ tag.name }}{{ "," if not loop.last }}
-        {% endfor %}
-    </p>
+    {% for post in posts %}
+        <div style="border: 1px solid black;margin :10px;">
+            <p>Data: {{ post.createdAt.toDateString() }} {{ post.createdAt.getHours() }}
+                :{{ post.createdAt.getMinutes() }}</p>
+            <p>Author: {{ post.author.name }}</p>
+            <p>Titlu : {{ post.title }}</p>
+            {% if post.tags.length %}
+                <p>Tags:
+                    {% for tag in post.tags %}
+                        {{ tag.name }}{{ "," if not loop.last }}
+                    {% endfor %}
+                </p>
+            {% endif %}
+            <p>Continut : {{ post.content }}</p>
+            {% if post.imagePath %}
+                <img src="{{ post.imagePath }}" alt="Image">
+            {% endif %}
+            <div style="display: flex; flex-direction: row;justify-content: space-evenly">
+                <form action="/post/{{ post.id }}/comments" method="get">
+                    <button type="submit">View comments</button>
+                </form>
+                {% if auth %}
+                    <form action="/post/{{ post.id }}/comment" method="get">
+                        <button type="submit">Add comment</button>
+                    </form>
+                    {% if userId == post.authorId or role == "ADMIN" %}
+                        <form action="/post/{{ post.id }}" method="get">
+                            <button type="submit">Edit post</button>
+                        </form>
+                        <form action="/post/{{ post.id }}" method="post">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit">Delete post</button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    {% if totalPages > 1 %}
+        <div style="text-align: center;">
+            <p>
+                Pagina {{ currentPage }} din {{ totalPages }}
+            </p>
+            {% if currentPage > 1 %}
+                <a href="?page={{ currentPage - 1 }}{% if sortOption %}&sortOption={{ sortOption }}{% endif %}{% if authorFilter %}&authorFilter={{ authorFilter }}{% endif %}">Pagina
+                    anterioară</a>
+            {% endif %}
+            {% if currentPage < totalPages %}
+                <a href="?page={{ currentPage + 1 }}{% if sortOption %}&sortOption={{ sortOption }}{% endif %}{% if authorFilter %}&authorFilter={{ authorFilter }}{% endif %}">Pagina
+                    următoare</a>
+            {% endif %}
+        </div>
     {% endif %}
-    <p>Continut : {{post.content}}</p>
-    <div style="display: flex; flex-direction: row;justify-content: space-evenly">
-        <form action="/post/{{post.id}}/comments" method="get">
-            <button type="submit">View comments</button>
-        </form>
-        {% if auth %}
-        <form action="/post/{{post.id}}/comment" method="get">
-            <button type="submit">Add comment</button>
-        </form>
-        {% if userId == post.authorId or role == "ADMIN" %}
-        <form action="/post/{{post.id}}" method="get">
-            <button type="submit">Edit post</button>
-        </form>
-        <form action="/post/{{post.id}}" method="post">
-            <input type="hidden" name="_method" value="DELETE">
-            <button type="submit">Delete post</button>
-        </form>
-        {%endif %}
-        {% endif %}
-    </div>
-</div>
-{% endfor %}
-{% if totalPages > 1 %}
-<div style="text-align: center;">
-    <p>
-        Pagina {{currentPage}} din {{totalPages}}
-    </p>
-    {% if currentPage > 1 %}
-    <a href="?page={{currentPage - 1}}{% if sortOption %}&sortOption={{sortOption}}{% endif %}{% if authorFilter %}&authorFilter={{authorFilter}}{% endif %}">Pagina anterioară</a>
-    {% endif %}
-    {% if currentPage < totalPages %}
-    <a href="?page={{currentPage + 1}}{% if sortOption %}&sortOption={{sortOption}}{% endif %}{% if authorFilter %}&authorFilter={{authorFilter}}{% endif %}">Pagina următoare</a>
-    {% endif %}
-</div>
-{% endif %}
 {% else %}
-<p>No post found</p>
+    <p>No post found</p>
 {% endif %}
 
 <script>
     let timeoutId;
+
     function delayedSubmit(input) {
         clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {

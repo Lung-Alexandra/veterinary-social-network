@@ -302,16 +302,17 @@ app.delete('/user/:id', authenticateJWT, async (req, res) => {
 app.get('/post', authenticateJWT, async (req, res) => {
     res.render('post.njk');
 });
-app.post('/post', authenticateJWT, async (req, res) => {
+app.post('/post', authenticateJWT,upload.single('imagePath'), async (req, res) => {
     try {
-        // console.log(req.session.userId)
+
         const {title, content, tags, type} = req.body;
 
 
         let imagePath = null;
         if (req.file) {
-            imagePath = path.join(__dirname, '..', req.file.path);
+            imagePath = path.join( "./", req.file.path).replace(/\\/g, '/');
         }
+        console.log(imagePath)
 
         const tagNames = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "" && tag !== undefined);
         // console.log(tagNames);
@@ -330,7 +331,7 @@ app.post('/post', authenticateJWT, async (req, res) => {
                 authorId: req.session.userId,
                 tags: {connect: tagRecords.map(tag => ({id: tag.id}))},
                 type,
-                imagePath
+                imagePath: imagePath
             },
             include: {tags: true}
         });
@@ -344,7 +345,7 @@ app.post('/post', authenticateJWT, async (req, res) => {
 
 
 // Read a specific post by ID
-app.get('/post/:id', async (req, res) => {
+app.get('/post/:id',authenticateJWT,upload.single('imagePath'), async (req, res) => {
     const {id} = req.params;
 
     try {
@@ -367,7 +368,7 @@ app.get('/post/:id', async (req, res) => {
 });
 
 // Update a post
-app.put('/post/:id', authenticateJWT, async (req, res) => {
+app.put('/post/:id', authenticateJWT,upload.single('imagePath'), async (req, res) => {
     const {id} = req.params;
     const {title, content, tags, type} = req.body;
 
@@ -379,6 +380,12 @@ app.put('/post/:id', authenticateJWT, async (req, res) => {
         if (post.authorId !== req.session.userId && req.session.role !== "ADMIN") {
             return res.status(403).json({message: 'Unauthorized to update this post'});
         }
+
+        let imagePath = null;
+        if (req.file) {
+            imagePath = path.join("./", req.file.path).replace(/\\/g, '/');
+        }
+        console.log(__dirname)
 
         const tagNames = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "" && tag !== undefined);
         // console.log(tags)
@@ -395,7 +402,8 @@ app.put('/post/:id', authenticateJWT, async (req, res) => {
                 title,
                 content,
                 tags: {connect: tagRecords.map(tag => ({id: tag.id}))},
-                type
+                type,
+                imagePath:imagePath
             },
             include: {tags: true}
         });

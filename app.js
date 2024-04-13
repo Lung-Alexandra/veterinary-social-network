@@ -13,6 +13,7 @@ var app = express();
 
 // Configurarea directorul pentru fisierele statice
 app.use(express.static(path.join(__dirname, '/static')));
+app.use(express.static(path.join(__dirname, '/uploads')));
 nunjucks.configure('static', {
     autoescape: true,
     express: app
