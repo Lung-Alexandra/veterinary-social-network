@@ -26,6 +26,7 @@ model Post {
   authorId  Int
   createdAt DateTime  @default(now())
   type      PostType
+  imagePath String?
   comments  Comment[]
   author    User      @relation(fields: [authorId], references: [id])
   tags      Tag[]     @relation("PostToTag")
@@ -49,7 +50,7 @@ model Comment {
 
 enum PostType {
   TEXT
-  IMAGE
+  TEXTIMAGE
 }
 
 enum Role {

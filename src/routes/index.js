@@ -6,6 +6,13 @@ const methodOverride = require('method-override');
 const prismaClient = require('./prisma.js');
 const {verifyToken, generateToken} = require('./jwt.js');
 const passport = require('./oauth');
+const multer = require('multer');
+const path = require('path');
+
+// Middleware pentru încărcarea imaginilor
+const upload = multer({
+    dest: 'uploads/' // Directorul unde vor fi salvate imaginile
+});
 
 
 const app = express.Router();
@@ -299,6 +306,13 @@ app.post('/post', authenticateJWT, async (req, res) => {
     try {
         // console.log(req.session.userId)
         const {title, content, tags, type} = req.body;
+
+
+        let imagePath = null;
+        if (req.file) {
+            imagePath = path.join(__dirname, '..', req.file.path);
+        }
+
         const tagNames = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "" && tag !== undefined);
         // console.log(tagNames);
         const tagRecords = await Promise.all(tagNames.map(async tagName => {
@@ -315,7 +329,8 @@ app.post('/post', authenticateJWT, async (req, res) => {
                 content,
                 authorId: req.session.userId,
                 tags: {connect: tagRecords.map(tag => ({id: tag.id}))},
-                type
+                type,
+                imagePath
             },
             include: {tags: true}
         });

@@ -8,29 +8,6 @@ const routes = require( "./src/routes/index.js");
 
 
 const port = process.env.PORT || 3000;
-// import errorHandler from "./src/middlewares/error-handler.js";
-
-// dotenv.config();
-
-//
-// app.use(express.json());
-//
-// const options = {
-//     definition: {
-//         openapi: "3.0.0",
-//         info: {
-//             title: "Todos",
-//             version: "1.0.0",
-//         },
-//     },
-//     apis: ["./src/routes/**.js", "./swagger/schemas.yaml"], // files containing annotations as above
-// };
-//
-// const openapiSpecification = swaggerJsdoc(options);
-//
-// if (process.env.NODE_ENV !== "production") {
-//     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
-// }
 
 var app = express();
 
