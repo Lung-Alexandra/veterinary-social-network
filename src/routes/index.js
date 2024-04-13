@@ -1,15 +1,14 @@
-const express = require( 'express');
-const bcrypt = require( 'bcrypt');
-const bodyParser = require( 'body-parser');
-const session = require( 'express-session');
-const methodOverride = require( 'method-override');
-const prismaClient = require( './prisma.js');
-const {verifyToken, generateToken} = require( './jwt.js');
+const express = require('express');
+const bcrypt = require('bcrypt');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const methodOverride = require('method-override');
+const prismaClient = require('./prisma.js');
+const {verifyToken, generateToken} = require('./jwt.js');
 const passport = require('./oauth');
 
 
 const app = express.Router();
-
 
 
 // Middleware pentru a parsa JSON si form-uri codificate in URL
@@ -26,7 +25,6 @@ app.use(session({
 // Middleware pentru autentificarea cu Passport
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 
 // Hash password before saving user
@@ -66,14 +64,13 @@ async function isAdmin(req, res, next) {
 }
 
 
-
 // Rute pentru autentificarea OAuth cu Google
 app.get('/auth/google',
-    passport.authenticate('google', { scope: ['profile', 'email'] }));
+    passport.authenticate('google', {scope: ['profile', 'email']}));
 
 app.get('/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: '/login' }),
-    function(req, res) {
+    passport.authenticate('google', {failureRedirect: '/login'}),
+    function (req, res) {
         req.session.token = generateToken(req.user.id);
         req.session.userId = req.user.id;
         req.session.role = req.user.role;
@@ -101,7 +98,7 @@ app.post('/signup', async (req, res) => {
 
     try {
         const hashedPassword = await hashPassword(password);
-        const user = await prismaClient.user.create({
+        await prismaClient.user.create({
             data: {email, password: hashedPassword, name},
         });
         console.log('User created successfully!');
@@ -164,7 +161,7 @@ app.get('/', async (req, res) => {
         const totalCount = await prismaClient.post.count({
             where: {
                 author: authorFilter ? {
-                    name: { contains: authorFilter }
+                    name: {contains: authorFilter}
                 } : undefined
             }
         });
@@ -214,63 +211,81 @@ app.get('/users', authenticateJWT, isAdmin, async (req, res) => {
 // Read a specific user by ID
 app.get('/user/:id', authenticateJWT, async (req, res) => {
     const {id} = req.params;
-    try {
-        const user = await prismaClient.user.findUnique({where: {id: parseInt(id)}});
-        if (!user) {
-            return res.status(404).json({message: 'User not found!'});
+    if (req.session.userId === parseInt(id)) {
+        try {
+            const user = await prismaClient.user.findUnique({where: {id: parseInt(id)}});
+            if (!user) {
+                return res.status(404).json({message: 'User not found!'});
+            }
+
+            res.render("user.njk", {user: user});
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({message: 'Error fetching user!'});
         }
-        res.render("user.njk", {user: user});
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: 'Error fetching user!'});
+    } else {
+        return res.status(403).json({message: 'Unauthorized access'});
     }
 });
 app.get('/editprofile/:id', authenticateJWT, async (req, res) => {
     const {id} = req.params;
-    try {
-        const user = await prismaClient.user.findUnique({where: {id: parseInt(id)}});
-        if (!user) {
-            return res.status(404).json({message: 'User not found!'});
+    if (req.session.userId === parseInt(id) || req.session.role === "ADMIN") {
+        try {
+            const user = await prismaClient.user.findUnique({where: {id: parseInt(id)}});
+            if (!user) {
+                return res.status(404).json({message: 'User not found!'});
+            }
+            res.render("editProfile.njk", {user: user});
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({message: 'Error fetching user!'});
         }
-        res.render("editProfile.njk", {user: user});
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: 'Error fetching user!'});
+    } else {
+        return res.status(403).json({message: 'Unauthorized access'});
     }
 });
 // Update a user
 app.put('/user/:id', authenticateJWT, async (req, res) => {
     const {id} = req.params;
     const {name, email, bio} = req.body;
-    try {
-        const user = await prismaClient.user.update({
-            where: {id: parseInt(id)},
-            data: {name, email, bio},
-        });
-        if (!user) {
-            return res.status(404).json({message: 'User not found!'});
+    if (req.session.userId === parseInt(id) || req.session.role === "ADMIN") {
+        try {
+            const user = await prismaClient.user.update({
+                where: {id: parseInt(id)},
+                data: {name, email, bio},
+            });
+            if (!user) {
+                return res.status(404).json({message: 'User not found!'});
+            }
+            // res.json({message: 'User updated successfully!', user});
+            res.redirect(`/user/${id}`)
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({message: 'Error updating user!'});
         }
-        // res.json({message: 'User updated successfully!', user});
-        res.redirect(`/user/${id}`)
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: 'Error updating user!'});
+    } else {
+        return res.status(403).json({message: 'Unauthorized access'});
     }
 });
 
 // Delete a user (implement access control for admins only)
 app.delete('/user/:id', authenticateJWT, async (req, res) => {
     const {id} = req.params;
-    try {
-        const user = await prismaClient.user.delete({where: {id: parseInt(id)}});
-        if (!user) {
-            return res.status(404).json({message: 'User not found!'});
+    if (req.session.userId === parseInt(id) || req.session.role === "ADMIN") {
+        try {
+            const user = await prismaClient.user.delete({where: {id: parseInt(id)}});
+            if (!user) {
+                return res.status(404).json({message: 'User not found!'});
+            }
+            console.log('User deleted successfully!');
+            res.redirect('/users');
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({message: 'Error deleting user!'});
         }
-        console.log('User deleted successfully!');
-        res.redirect('/users');
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: 'Error deleting user!'});
+    } else {
+        return res.status(403).json({message: 'Unauthorized access'});
     }
 });
 
@@ -316,26 +331,40 @@ app.post('/post', authenticateJWT, async (req, res) => {
 // Read a specific post by ID
 app.get('/post/:id', async (req, res) => {
     const {id} = req.params;
+
     try {
         const post = await prismaClient.post.findUnique({
             where: {id: parseInt(id)},
-            include: {author: true, tags:true},
+            include: {author: true, tags: true},
         });
         if (!post) {
             return res.status(404).json({message: 'Post not found!'});
+        }
+        if (post.authorId !== req.session.userId && req.session.role !== "ADMIN") {
+            return res.status(403).json({message: 'Unauthorized to update this post'});
         }
         res.render("post.njk", {post: post, method: "put"})
     } catch (error) {
         console.error(error);
         res.status(500).json({message: 'Error fetching post!'});
     }
+
 });
 
 // Update a post
 app.put('/post/:id', authenticateJWT, async (req, res) => {
     const {id} = req.params;
     const {title, content, tags, type} = req.body;
+
     try {
+        const post = await prismaClient.post.findUnique({where: {id: parseInt(id)}});
+        if (!post) {
+            return res.status(404).json({message: 'Post not found!'});
+        }
+        if (post.authorId !== req.session.userId && req.session.role !== "ADMIN") {
+            return res.status(403).json({message: 'Unauthorized to update this post'});
+        }
+
         const tagNames = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "" && tag !== undefined);
         // console.log(tags)
         const tagRecords = await Promise.all(tagNames.map(async tagName => {
@@ -345,7 +374,7 @@ app.put('/post/:id', authenticateJWT, async (req, res) => {
                 create: {name: tagName}
             });
         }));
-        const post = await prismaClient.post.update({
+        await prismaClient.post.update({
             where: {id: parseInt(id)},
             data: {
                 title,
@@ -355,9 +384,7 @@ app.put('/post/:id', authenticateJWT, async (req, res) => {
             },
             include: {tags: true}
         });
-        if (!post) {
-            return res.status(404).json({message: 'Post not found!'});
-        }
+
         console.log('Post updated successfully!');
         res.redirect('/')
 
@@ -365,22 +392,31 @@ app.put('/post/:id', authenticateJWT, async (req, res) => {
         console.error(error);
         res.status(500).json({message: 'Error updating post!'});
     }
+
 });
 
 // Delete a post
 app.delete('/post/:id', authenticateJWT, async (req, res) => {
     const {id} = req.params;
-    try {
-        const post = await prismaClient.post.delete({where: {id: parseInt(id)}});
-        if (!post) {
-            return res.status(404).json({message: 'Post not found!'});
+        try {
+            const post = await prismaClient.post.findUnique({where: {id: parseInt(id)}});
+            if (!post) {
+                return res.status(404).json({message: 'Post not found!'});
+            }
+            if (post.authorId !== req.session.userId && req.session.role !== "ADMIN") {
+                return res.status(403).json({message: 'Unauthorized to update this post'});
+            }
+
+            await prismaClient.post.delete({where: {id: parseInt(id)}});
+
+
+            res.redirect("/")
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({message: 'Error deleting post!'});
         }
-        res.redirect("/")
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: 'Error deleting post!'});
-    }
-});
+
+})
 
 // Comment CRUD operations
 
@@ -395,7 +431,8 @@ app.get('/post/:postId/comment', authenticateJWT, async (req, res) => {
 });
 // Read a specific comment by ID
 app.get('/post/:postId/comment/:commentId', authenticateJWT, async (req, res) => {
-    const { postId, commentId } = req.params;
+    const {postId, commentId} = req.params;
+
     try {
         const comment = await prismaClient.comment.findUnique({
             where: {
@@ -403,21 +440,26 @@ app.get('/post/:postId/comment/:commentId', authenticateJWT, async (req, res) =>
             }
         });
         if (!comment) {
-            return res.status(404).json({ message: 'Comment not found' });
+            return res.status(404).json({message: 'Comment not found'});
         }
-        res.render("addcomm.njk", {postId: postId, comment:comment, method: "put"})
+        if (comment.authorId !== req.session.userId && req.session.role !== "ADMIN") {
+            return res.status(403).json({message: 'Unauthorized to update this comment'});
+        }
+        res.render("addcomm.njk", {postId: postId, comment: comment, method: "put"})
+
     } catch (error) {
         console.error(error);
         res.status(500).json({message: 'Error fetching post!'});
     }
-});
+
+})
 
 // Create a comment for a specific post
 app.post('/post/:postId/comment', authenticateJWT, async (req, res) => {
     const {postId} = req.params;
     const {content} = req.body;
     try {
-        const comment = await prismaClient.comment.create({
+        await prismaClient.comment.create({
             data: {
                 content,
                 postId: parseInt(postId),
@@ -434,8 +476,9 @@ app.post('/post/:postId/comment', authenticateJWT, async (req, res) => {
 
 // Update a comment
 app.put('/post/:postId/comment/:commentId', authenticateJWT, async (req, res) => {
-    const { postId, commentId } = req.params;
-    const { content } = req.body;
+    const {postId, commentId} = req.params;
+    const {content} = req.body;
+
     try {
         let comment = await prismaClient.comment.findUnique({
             where: {
@@ -443,12 +486,12 @@ app.put('/post/:postId/comment/:commentId', authenticateJWT, async (req, res) =>
             }
         });
         if (!comment) {
-            return res.status(404).json({ message: 'Comment not found' });
+            return res.status(404).json({message: 'Comment not found'});
         }
 
         // Check if the user is authorized to update the comment
         if (comment.authorId !== req.session.userId && req.session.role !== "ADMIN") {
-            return res.status(403).json({ message: 'Unauthorized to update this comment' });
+            return res.status(403).json({message: 'Unauthorized to update this comment'});
         }
 
         // Update the comment
@@ -464,27 +507,26 @@ app.put('/post/:postId/comment/:commentId', authenticateJWT, async (req, res) =>
         res.redirect(`/post/${postId}/comments`);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error updating comment' });
+        res.status(500).json({message: 'Error updating comment'});
     }
 });
 
 
 app.delete('/post/:postId/comment/:commentId', authenticateJWT, async (req, res) => {
-    const { postId, commentId } = req.params;
+    const {postId, commentId} = req.params;
     try {
-
         const comment = await prismaClient.comment.findUnique({
             where: {
                 id: parseInt(commentId)
             }
         });
         if (!comment) {
-            return res.status(404).json({ message: 'Comment not found' });
+            return res.status(404).json({message: 'Comment not found'});
         }
 
         // Check if the user is authorized to delete the comment
         if (comment.authorId !== req.session.userId && req.session.role !== "ADMIN") {
-            return res.status(403).json({ message: 'Unauthorized to delete this comment' });
+            return res.status(403).json({message: 'Unauthorized to delete this comment'});
         }
 
         // Delete the comment
@@ -497,8 +539,9 @@ app.delete('/post/:postId/comment/:commentId', authenticateJWT, async (req, res)
         res.redirect(`/post/${postId}/comments`);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error deleting comment' });
+        res.status(500).json({message: 'Error deleting comment'});
     }
+
 });
 
 // Read all comments for a specific post
@@ -507,7 +550,11 @@ app.get('/post/:postId/comments', async (req, res) => {
     try {
         const comments = await prismaClient.comment.findMany({
             where: {postId: parseInt(postId)},
-            include:{author:true}
+            orderBy: {
+                createdAt: 'desc'
+            },
+            include: {author: true},
+
         });
         res.render('comments.njk', {
             comments: comments,
@@ -522,4 +569,4 @@ app.get('/post/:postId/comments', async (req, res) => {
 });
 
 
-module.exports= app;
+module.exports = app;
