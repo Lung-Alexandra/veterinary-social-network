@@ -19,8 +19,10 @@
 {% endif %}
 <form id="sortForm" method="get">
     <select name="sortOption" onchange="this.form.submit()">
-        <option value="createdAtDesc">Sorteaza dupa data (descendent)</option>
-        <option value="createdAtAsc">Sorteaza dupa data (ascendent)</option>
+        <option value="createdAtDesc" {% if (sortOption === 'createdAtDesc') %} selected {% endif %}>Sorteaza dupa data (descendent)
+        </option>
+        <option value="createdAtAsc" {% if (sortOption === 'createdAtAsc') %} selected {% endif %}>Sorteaza dupa data (ascendent)
+        </option>
     </select>
 </form>
 <form id="filterForm" method="get">
@@ -42,7 +44,7 @@
             {% endif %}
             <p>Continut : {{ post.content }}</p>
             {% if post.imagePath %}
-                <img src="{{ post.imagePath }}" alt="Image"  style="width: 500px; height:250px;">
+                <img src="{{ post.imagePath }}" alt="Image" style="width: 500px; height:250px;">
             {% endif %}
             <div style="display: flex; flex-direction: row;justify-content: space-evenly">
                 <form action="/post/{{ post.id }}/comments" method="get">
