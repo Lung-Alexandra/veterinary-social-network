@@ -9,10 +9,22 @@ const passport = require('./oauth');
 const multer = require('multer');
 const path = require('path');
 
-// Middleware pentru încărcarea imaginilor
-const upload = multer({
-    dest: 'uploads/' // Directorul unde vor fi salvate imaginile
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'static/uploads/');
+    },
+    limits: {
+        fileSize: 1000000
+    },
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+            return cb(new Error('Please upload a valid image file'))
+        }
+        cb(undefined, true)
+    }
 });
+
+const upload = multer({storage: storage});
 
 
 const app = express.Router();
@@ -94,10 +106,16 @@ app.use(methodOverride(function (req, res) {
         delete req.body._method
         return method
     }
+    if(req.session._method){
+        let method = req.session._method
+        // console.log(method)
+        delete req.session._method
+        return method
+    }
 }))
 
 app.get('/signup', (req, res) => {
-    res.render('signup.njk', {messages: res.locals.messages});
+    res.render('views/signup.njk', {messages: res.locals.messages});
 });
 // User signup
 app.post('/signup', async (req, res) => {
@@ -119,7 +137,7 @@ app.post('/signup', async (req, res) => {
 
 
 app.get('/login', (req, res) => {
-    res.render('login.njk', {messages: res.locals.messages});
+    res.render('views/login.njk', {messages: res.locals.messages});
 });
 
 // User login (replace with JWT based authentication for production)
@@ -187,7 +205,7 @@ app.get('/', async (req, res) => {
             take: perPage
         });
         // console.log(req.session.userId)
-        res.render('index.njk', {
+        res.render('views/index.njk', {
             posts: posts,
             auth: isLogin(req),
             currentPage: parseInt(page),
@@ -208,7 +226,7 @@ app.get('/', async (req, res) => {
 app.get('/users', authenticateJWT, isAdmin, async (req, res) => {
     try {
         const users = await prismaClient.user.findMany();
-        res.render("users.njk", {users: users});
+        res.render('views/users.njk', {users: users});
     } catch (error) {
         console.error(error);
         res.status(500).json({message: 'Error fetching users!'});
@@ -225,7 +243,7 @@ app.get('/user/:id', authenticateJWT, async (req, res) => {
                 return res.status(404).json({message: 'User not found!'});
             }
 
-            res.render("user.njk", {user: user});
+            res.render('views/user.njk', {user: user});
 
         } catch (error) {
             console.error(error);
@@ -243,7 +261,7 @@ app.get('/editprofile/:id', authenticateJWT, async (req, res) => {
             if (!user) {
                 return res.status(404).json({message: 'User not found!'});
             }
-            res.render("editProfile.njk", {user: user});
+            res.render('views/editProfile.njk', {user: user});
         } catch (error) {
             console.error(error);
             res.status(500).json({message: 'Error fetching user!'});
@@ -300,19 +318,19 @@ app.delete('/user/:id', authenticateJWT, async (req, res) => {
 
 // Read
 app.get('/post', authenticateJWT, async (req, res) => {
-    res.render('post.njk');
+    res.render('views/post.njk');
 });
-app.post('/post', authenticateJWT,upload.single('imagePath'), async (req, res) => {
+app.post('/post', authenticateJWT, upload.single('imagePath'), async (req, res) => {
     try {
 
         const {title, content, tags, type} = req.body;
 
-
         let imagePath = null;
-        if (req.file) {
-            imagePath = path.join( "./", req.file.path).replace(/\\/g, '/');
+        if (type === "TEXTIMAGE") {
+            if (req.file) {
+                imagePath =  (req.file.path.replace(/^static/, '')).replace(/\\/g, '/');
+            }
         }
-        console.log(imagePath)
 
         const tagNames = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "" && tag !== undefined);
         // console.log(tagNames);
@@ -345,7 +363,7 @@ app.post('/post', authenticateJWT,upload.single('imagePath'), async (req, res) =
 
 
 // Read a specific post by ID
-app.get('/post/:id',authenticateJWT,upload.single('imagePath'), async (req, res) => {
+app.get('/post/:id', authenticateJWT, upload.single('imagePath'), async (req, res) => {
     const {id} = req.params;
 
     try {
@@ -359,7 +377,8 @@ app.get('/post/:id',authenticateJWT,upload.single('imagePath'), async (req, res)
         if (post.authorId !== req.session.userId && req.session.role !== "ADMIN") {
             return res.status(403).json({message: 'Unauthorized to update this post'});
         }
-        res.render("post.njk", {post: post, method: "put"})
+        req.session._method = "put";
+        res.render('views/post.njk', {post: post,method:"put"})
     } catch (error) {
         console.error(error);
         res.status(500).json({message: 'Error fetching post!'});
@@ -368,7 +387,7 @@ app.get('/post/:id',authenticateJWT,upload.single('imagePath'), async (req, res)
 });
 
 // Update a post
-app.put('/post/:id', authenticateJWT,upload.single('imagePath'), async (req, res) => {
+app.put('/post/:id', authenticateJWT, upload.single('imagePath'), async (req, res) => {
     const {id} = req.params;
     const {title, content, tags, type} = req.body;
 
@@ -380,12 +399,12 @@ app.put('/post/:id', authenticateJWT,upload.single('imagePath'), async (req, res
         if (post.authorId !== req.session.userId && req.session.role !== "ADMIN") {
             return res.status(403).json({message: 'Unauthorized to update this post'});
         }
-
         let imagePath = null;
-        if (req.file) {
-            imagePath = path.join("./", req.file.path).replace(/\\/g, '/');
+        if (type === "TEXTIMAGE") {
+            if (req.file) {
+                imagePath = (req.file.path.replace(/^static/, '')).replace(/\\/g, '/');
+            }
         }
-        console.log(__dirname)
 
         const tagNames = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "" && tag !== undefined);
         // console.log(tags)
@@ -403,7 +422,7 @@ app.put('/post/:id', authenticateJWT,upload.single('imagePath'), async (req, res
                 content,
                 tags: {connect: tagRecords.map(tag => ({id: tag.id}))},
                 type,
-                imagePath:imagePath
+                imagePath: imagePath
             },
             include: {tags: true}
         });
@@ -421,23 +440,38 @@ app.put('/post/:id', authenticateJWT,upload.single('imagePath'), async (req, res
 // Delete a post
 app.delete('/post/:id', authenticateJWT, async (req, res) => {
     const {id} = req.params;
-        try {
-            const post = await prismaClient.post.findUnique({where: {id: parseInt(id)}});
-            if (!post) {
-                return res.status(404).json({message: 'Post not found!'});
-            }
-            if (post.authorId !== req.session.userId && req.session.role !== "ADMIN") {
-                return res.status(403).json({message: 'Unauthorized to update this post'});
-            }
-
-            await prismaClient.post.delete({where: {id: parseInt(id)}});
-
-
-            res.redirect("/")
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({message: 'Error deleting post!'});
+    try {
+        const post = await prismaClient.post.findUnique({where: {id: parseInt(id)}, include:{comments:true, tags:true}});
+        if (!post) {
+            return res.status(404).json({message: 'Post not found!'});
         }
+        if (post.authorId !== req.session.userId && req.session.role !== "ADMIN") {
+            return res.status(403).json({message: 'Unauthorized to update this post'});
+        }
+
+        if (post.comments) {
+            await Promise.all(post.comments.map(async (comment) => {
+                await prismaClient.comment.delete({where: {id: comment.id}});
+            }));
+        }
+        // Remove the associations with tags
+        if (post.tags) {
+            await Promise.all(post.tags.map(async (tag) => {
+                await prismaClient.tag.update({
+                    where: {id: tag.id},
+                    data: {posts: {disconnect: {id: post.id}}}
+                });
+            }));
+        }
+
+        await prismaClient.post.delete({where: {id: parseInt(id)}});
+
+
+        res.redirect("/")
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Error deleting post!'});
+    }
 
 })
 
@@ -446,7 +480,7 @@ app.delete('/post/:id', authenticateJWT, async (req, res) => {
 app.get('/post/:postId/comment', authenticateJWT, async (req, res) => {
     const {postId} = req.params;
     try {
-        res.render('addcomm.njk', {postId: postId});
+        res.render('views/addcomm.njk', {postId: postId});
     } catch (error) {
         console.error(error);
         res.status(500).json({message: 'Error fetching post for comment form!'});
@@ -468,7 +502,7 @@ app.get('/post/:postId/comment/:commentId', authenticateJWT, async (req, res) =>
         if (comment.authorId !== req.session.userId && req.session.role !== "ADMIN") {
             return res.status(403).json({message: 'Unauthorized to update this comment'});
         }
-        res.render("addcomm.njk", {postId: postId, comment: comment, method: "put"})
+        res.render('views/addcomm.njk', {postId: postId, comment: comment, method: "put"})
 
     } catch (error) {
         console.error(error);
@@ -579,7 +613,7 @@ app.get('/post/:postId/comments', async (req, res) => {
             include: {author: true},
 
         });
-        res.render('comments.njk', {
+        res.render('views/comments.njk', {
             comments: comments,
             auth: isLogin(req),
             userId: req.session.userId,
