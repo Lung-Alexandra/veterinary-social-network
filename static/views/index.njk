@@ -42,7 +42,7 @@
             {% endif %}
             <p>Continut : {{ post.content }}</p>
             {% if post.imagePath %}
-                <img src="{{ post.imagePath }}" alt="Image"  style="width: 300px; height:150px;">
+                <img src="{{ post.imagePath }}" alt="Image"  style="width: 600px; height:300px;">
             {% endif %}
             <div style="display: flex; flex-direction: row;justify-content: space-evenly">
                 <form action="/post/{{ post.id }}/comments" method="get">
