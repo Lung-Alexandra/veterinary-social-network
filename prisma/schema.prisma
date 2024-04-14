@@ -25,6 +25,7 @@ model Post {
   content   String
   authorId  Int
   createdAt DateTime  @default(now())
+  createdAt DateTime
   type      PostType
   imagePath String?
   comments  Comment[]
