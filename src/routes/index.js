@@ -600,7 +600,8 @@ app.get('/post/:postId/comments', async (req, res) => {
             comments: comments,
             auth: isLogin(req),
             userId: req.session.userId,
-            role: req.session.role
+            role: req.session.role,
+            postId:postId
         });
     } catch (error) {
         console.error(error);

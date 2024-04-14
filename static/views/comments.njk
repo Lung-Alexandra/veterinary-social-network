@@ -6,30 +6,35 @@
 </head>
 <body>
 {% if comments.length === 0 %}
-<p> no comments yet</p>
+    <p> no comments yet</p>
 {% else %}
-{% for comment in comments %}
-<div style="display:flex;flex-direction:column;border:1px solid black; margin: 10px;">
-    <p>{{ comment.author.name }}</p>
-    <p>Data: {{comment.createdAt.toDateString() }} {{ comment.createdAt.getHours() }}:{{ comment.createdAt.getMinutes()
-        }}</p>
-    <p>{{ comment.content }}</p>
-</div>
+    {% for comment in comments %}
+        <div style="display:flex;flex-direction:column;border:1px solid black; margin: 10px;">
+            <p>{{ comment.author.name }}</p>
+            <p>Data: {{ comment.createdAt.toDateString() }} {{ comment.createdAt.getHours() }}
+                :{{ comment.createdAt.getMinutes() }}</p>
+            <p>{{ comment.content }}</p>
+        </div>
 
-<div style="display: flex; flex-direction: row;justify-content: space-evenly">
-    {% if auth %}
-        {% if userId == comment.authorId or role == "ADMIN" %}
-        <form action="/post/{{comment.postId}}/comment/{{comment.id}}" method="get">
-            <button type="submit">Edit comment</button>
-        </form>
-        <form action="/post/{{comment.postId}}/comment/{{comment.id}}" method="post">
-            <input type="hidden" name="_method" value="DELETE">
-            <button type="submit">Delete comment</button>
-        </form>
-        {% endif %}
-    {% endif %}
-</div>
-{% endfor %}
+        <div style="display: flex; flex-direction: row;justify-content: space-evenly">
+            {% if auth %}
+                {% if userId == comment.authorId or role == "ADMIN" %}
+                    <form action="/post/{{ comment.postId }}/comment/{{ comment.id }}" method="get">
+                        <button type="submit">Edit comment</button>
+                    </form>
+                    <form action="/post/{{ comment.postId }}/comment/{{ comment.id }}" method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit">Delete comment</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endif %}
+{% if auth %}
+<form action="/post/{{ postId }}/comment" method="get">
+    <button type="submit">Add new comment</button>
+</form>
 {% endif %}
 <button type="submit"><a href="/">Back</a></button>
 
