@@ -502,6 +502,7 @@ app.get('/post/:postId/comment/:commentId', authenticateJWT, async (req, res) =>
         if (comment.authorId !== req.session.userId && req.session.role !== "ADMIN") {
             return res.status(403).json({message: 'Unauthorized to update this comment'});
         }
+        req.session._method = "put";
         res.render('views/addcomm.njk', {postId: postId, comment: comment, method: "put"})
 
     } catch (error) {
