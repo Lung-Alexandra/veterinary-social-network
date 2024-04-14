@@ -6,26 +6,7 @@ const methodOverride = require('method-override');
 const prismaClient = require('./prisma.js');
 const {verifyToken, generateToken} = require('./jwt.js');
 const passport = require('./oauth');
-const multer = require('multer');
-const path = require('path');
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'static/uploads/');
-    },
-    limits: {
-        fileSize: 1000000
-    },
-    fileFilter(req, file, cb) {
-        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-            return cb(new Error('Please upload a valid image file'))
-        }
-        cb(undefined, true)
-    }
-});
-
-const upload = multer({storage: storage});
-
+const uploadMiddleware = require("./../middlewares/uploadMiddleware");
 
 const app = express.Router();
 
@@ -45,6 +26,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+const upload = uploadMiddleware("upload");
 
 // Hash password before saving user
 async function hashPassword(password) {
@@ -328,7 +310,7 @@ app.post('/post', authenticateJWT, upload.single('imagePath'), async (req, res) 
         let imagePath = null;
         if (type === "TEXTIMAGE") {
             if (req.file) {
-                imagePath =  (req.file.path.replace(/^static/, '')).replace(/\\/g, '/');
+                imagePath =  req.file.path;
             }
         }
 
@@ -402,7 +384,7 @@ app.put('/post/:id', authenticateJWT, upload.single('imagePath'), async (req, re
         let imagePath = null;
         if (type === "TEXTIMAGE") {
             if (req.file) {
-                imagePath = (req.file.path.replace(/^static/, '')).replace(/\\/g, '/');
+                imagePath = req.file.path;
             }
         }
 
