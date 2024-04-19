@@ -62,6 +62,6 @@ router.route("/:id").get( authenticateJWT, upload.single('imagePath'),postsContr
 router.route("/:id").put( authenticateJWT, upload.single('imagePath'), postsController.modifyPost);
 
 // Delete a post
-router.delete('/post/:id', authenticateJWT, postsController.deletePost);
+router.route("/:id").delete( authenticateJWT, postsController.deletePost);
 
 module.exports = router;
