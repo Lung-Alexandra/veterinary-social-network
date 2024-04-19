@@ -56,7 +56,8 @@ const modifyPost = async (req, res, next) => {
             return res.status(403).json({message: 'Unauthorized to update this post'});
         }
 
-        await postsService.modifyPost(postInfo);
+        const idk = await postsService.modifyPost(postInfo);
+        console.log(idk)
         console.log('Post updated successfully!');
         res.redirect('/');
 
