@@ -7,7 +7,9 @@ const prismaClient = require('./prisma.js');
 const {verifyToken, generateToken} = require('./jwt.js');
 const passport = require('./oauth');
 const uploadMiddleware = require("./../middlewares/uploadMiddleware");
-
+const {authenticateJWT} = require('./../middlewares/jwtMiddleware.js');
+const {isLogin,isAdmin} = require('./../routes/util.js');
+const postRouter = require("./../routes/posts.js");
 const app = express.Router();
 
 
@@ -34,35 +36,7 @@ async function hashPassword(password) {
     return await bcrypt.hash(password, salt);
 }
 
-function isLogin(req) {
-    return req.session.token !== undefined;
-}
 
-// Middleware
-function authenticateJWT(req, res, next) {
-    const token = req.session.token;
-
-    if (!token) {
-        return res.status(401).json({message: 'Unauthorized: Missing JWT token'});
-    }
-    try {
-        const decoded = verifyToken(token); // Verificarea token-ul
-        req.session.userId = decoded.userId;
-        next();
-    } catch (error) {
-        return res.status(401).json({message: 'Unauthorized: Invalid JWT token'});
-    }
-}
-
-async function isAdmin(req, res, next) {
-
-    if (req.session.role === "ADMIN") {
-        next();
-    } else {
-        return res.status(401).json({message: 'Unauthorized: Not an admin'});
-    }
-
-}
 
 
 // Rute pentru autentificarea OAuth cu Google
@@ -297,165 +271,7 @@ app.delete('/user/:id', authenticateJWT, async (req, res) => {
 });
 
 // Post CRUD operations
-
-// Read
-app.get('/post', authenticateJWT, async (req, res) => {
-    res.render('views/post.njk');
-});
-app.post('/post', authenticateJWT, upload.single('imagePath'), async (req, res) => {
-    try {
-
-        const {title, content, tags, type} = req.body;
-
-        let imagePath = null;
-        if (type === "TEXTIMAGE") {
-            if (req.file) {
-                imagePath =  req.file.path;
-            }
-        }
-
-        const tagNames = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "" && tag !== undefined);
-        // console.log(tagNames);
-        const tagRecords = await Promise.all(tagNames.map(async tagName => {
-            return prismaClient.tag.upsert({
-                where: {name: tagName},
-                update: {},
-                create: {name: tagName}
-            });
-        }));
-
-        await prismaClient.post.create({
-            data: {
-                title,
-                content,
-                authorId: req.session.userId,
-                tags: {connect: tagRecords.map(tag => ({id: tag.id}))},
-                type,
-                imagePath: imagePath
-            },
-            include: {tags: true}
-        });
-        res.redirect('/');
-    } catch (error) {
-        console.error(error);
-        // res.status(500).json({ message: 'Error creating post!' });
-        res.redirect('/post')
-    }
-});
-
-
-// Read a specific post by ID
-app.get('/post/:id', authenticateJWT, upload.single('imagePath'), async (req, res) => {
-    const {id} = req.params;
-
-    try {
-        const post = await prismaClient.post.findUnique({
-            where: {id: parseInt(id)},
-            include: {author: true, tags: true},
-        });
-        if (!post) {
-            return res.status(404).json({message: 'Post not found!'});
-        }
-        if (post.authorId !== req.session.userId && req.session.role !== "ADMIN") {
-            return res.status(403).json({message: 'Unauthorized to update this post'});
-        }
-        req.session._method = "put";
-        res.render('views/post.njk', {post: post,method:"put"})
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: 'Error fetching post!'});
-    }
-
-});
-
-// Update a post
-app.put('/post/:id', authenticateJWT, upload.single('imagePath'), async (req, res) => {
-    const {id} = req.params;
-    const {title, content, tags, type} = req.body;
-
-    try {
-        const post = await prismaClient.post.findUnique({where: {id: parseInt(id)}});
-        if (!post) {
-            return res.status(404).json({message: 'Post not found!'});
-        }
-        if (post.authorId !== req.session.userId && req.session.role !== "ADMIN") {
-            return res.status(403).json({message: 'Unauthorized to update this post'});
-        }
-        let imagePath = null;
-        if (type === "TEXTIMAGE") {
-            if (req.file) {
-                imagePath = req.file.path;
-            }
-        }
-
-        const tagNames = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "" && tag !== undefined);
-        // console.log(tags)
-        const tagRecords = await Promise.all(tagNames.map(async tagName => {
-            return prismaClient.tag.upsert({
-                where: {name: tagName},
-                update: {},
-                create: {name: tagName}
-            });
-        }));
-        await prismaClient.post.update({
-            where: {id: parseInt(id)},
-            data: {
-                title,
-                content,
-                tags: {connect: tagRecords.map(tag => ({id: tag.id}))},
-                type,
-                imagePath: imagePath
-            },
-            include: {tags: true}
-        });
-
-        console.log('Post updated successfully!');
-        res.redirect('/')
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: 'Error updating post!'});
-    }
-
-});
-
-// Delete a post
-app.delete('/post/:id', authenticateJWT, async (req, res) => {
-    const {id} = req.params;
-    try {
-        const post = await prismaClient.post.findUnique({where: {id: parseInt(id)}, include:{comments:true, tags:true}});
-        if (!post) {
-            return res.status(404).json({message: 'Post not found!'});
-        }
-        if (post.authorId !== req.session.userId && req.session.role !== "ADMIN") {
-            return res.status(403).json({message: 'Unauthorized to update this post'});
-        }
-
-        if (post.comments) {
-            await Promise.all(post.comments.map(async (comment) => {
-                await prismaClient.comment.delete({where: {id: comment.id}});
-            }));
-        }
-        // Remove the associations with tags
-        if (post.tags) {
-            await Promise.all(post.tags.map(async (tag) => {
-                await prismaClient.tag.update({
-                    where: {id: tag.id},
-                    data: {posts: {disconnect: {id: post.id}}}
-                });
-            }));
-        }
-
-        await prismaClient.post.delete({where: {id: parseInt(id)}});
-
-
-        res.redirect("/")
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: 'Error deleting post!'});
-    }
-
-})
+app.use("/post",postRouter);
 
 // Comment CRUD operations
 

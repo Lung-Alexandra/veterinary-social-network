@@ -9,11 +9,10 @@ const routes = require( "./src/routes/index.js");
 
 const port = process.env.PORT || 3000;
 
-var app = express();
+let app = express();
 
 // Configurarea directorul pentru fisierele statice
 app.use(express.static(path.join(__dirname, '/static')));
-app.use(express.static(path.join(__dirname, '/uploads')));
 nunjucks.configure('static', {
     autoescape: true,
     express: app

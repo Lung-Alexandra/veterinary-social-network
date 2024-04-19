@@ -15,7 +15,7 @@ passport.use(new GoogleStrategy({
             let user = await prismaClient.user.findUnique({ where: { email: profile.emails[0].value } });
             if (!user) {
                 const hashedPassword = await bcrypt.hash(profile.id, 10);
-                // Creeaza un utilizator nou daca nu exista deja
+
                 user = await prismaClient.user.create({
                     data: {
                         email: profile.emails[0].value,
