@@ -52,7 +52,7 @@ const upload = uploadMiddleware("upload");
 router.route('/').get( authenticateJWT, async (req, res) => {
     res.render('views/post.njk');
 });
-// router.route('/').post( authenticateJWT, upload.single('imagePath'),postsController.createPost);
+router.route('/').post( authenticateJWT, upload.single('imagePath'),postsController.createPost);
 
 
 // Read a specific post by ID
