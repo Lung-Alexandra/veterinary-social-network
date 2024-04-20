@@ -10,6 +10,8 @@ const uploadMiddleware = require("./../middlewares/uploadMiddleware");
 const {authenticateJWT} = require('./../middlewares/jwtMiddleware.js');
 const {isLogin,isAdmin} = require('./../routes/util.js');
 const postRouter = require("./../routes/posts.js");
+const userRouter = require("./../routes/users.js");
+const commentRouter = require("./../routes/comments.js");
 const app = express.Router();
 
 
@@ -28,7 +30,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-const upload = uploadMiddleware("upload");
 
 // Hash password before saving user
 async function hashPassword(password) {
@@ -177,7 +178,7 @@ app.get('/', async (req, res) => {
     }
 });
 // User CRUD operations
-
+app.use("/user",userRouter);
 // Read all users (implement access control for admins only)
 app.get('/users', authenticateJWT, isAdmin, async (req, res) => {
     try {
@@ -186,27 +187,6 @@ app.get('/users', authenticateJWT, isAdmin, async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({message: 'Error fetching users!'});
-    }
-});
-
-// Read a specific user by ID
-app.get('/user/:id', authenticateJWT, async (req, res) => {
-    const {id} = req.params;
-    if (req.session.userId === parseInt(id)) {
-        try {
-            const user = await prismaClient.user.findUnique({where: {id: parseInt(id)}});
-            if (!user) {
-                return res.status(404).json({message: 'User not found!'});
-            }
-
-            res.render('views/user.njk', {user: user});
-
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({message: 'Error fetching user!'});
-        }
-    } else {
-        return res.status(403).json({message: 'Unauthorized access'});
     }
 });
 app.get('/editprofile/:id', authenticateJWT, async (req, res) => {
@@ -226,204 +206,13 @@ app.get('/editprofile/:id', authenticateJWT, async (req, res) => {
         return res.status(403).json({message: 'Unauthorized access'});
     }
 });
-// Update a user
-app.put('/user/:id', authenticateJWT, async (req, res) => {
-    const {id} = req.params;
-    const {name, email, bio} = req.body;
-    if (req.session.userId === parseInt(id) || req.session.role === "ADMIN") {
-        try {
-            const user = await prismaClient.user.update({
-                where: {id: parseInt(id)},
-                data: {name, email, bio},
-            });
-            if (!user) {
-                return res.status(404).json({message: 'User not found!'});
-            }
-            // res.json({message: 'User updated successfully!', user});
-            res.redirect(`/user/${id}`)
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({message: 'Error updating user!'});
-        }
-    } else {
-        return res.status(403).json({message: 'Unauthorized access'});
-    }
-});
 
-// Delete a user (implement access control for admins only)
-app.delete('/user/:id', authenticateJWT, async (req, res) => {
-    const {id} = req.params;
-    if (req.session.userId === parseInt(id) || req.session.role === "ADMIN") {
-        try {
-            const user = await prismaClient.user.delete({where: {id: parseInt(id)}});
-            if (!user) {
-                return res.status(404).json({message: 'User not found!'});
-            }
-            console.log('User deleted successfully!');
-            res.redirect('/users');
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({message: 'Error deleting user!'});
-        }
-    } else {
-        return res.status(403).json({message: 'Unauthorized access'});
-    }
-});
+// Comment CRUD operations
+app.use("/post",commentRouter)
 
 // Post CRUD operations
 app.use("/post",postRouter);
 
-// Comment CRUD operations
-
-app.get('/post/:postId/comment', authenticateJWT, async (req, res) => {
-    const {postId} = req.params;
-    try {
-        res.render('views/addcomm.njk', {postId: postId});
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: 'Error fetching post for comment form!'});
-    }
-});
-// Read a specific comment by ID
-app.get('/post/:postId/comment/:commentId', authenticateJWT, async (req, res) => {
-    const {postId, commentId} = req.params;
-
-    try {
-        const comment = await prismaClient.comment.findUnique({
-            where: {
-                id: parseInt(commentId)
-            }
-        });
-        if (!comment) {
-            return res.status(404).json({message: 'Comment not found'});
-        }
-        if (comment.authorId !== req.session.userId && req.session.role !== "ADMIN") {
-            return res.status(403).json({message: 'Unauthorized to update this comment'});
-        }
-        req.session._method = "put";
-        res.render('views/addcomm.njk', {postId: postId, comment: comment, method: "put"})
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: 'Error fetching post!'});
-    }
-
-})
-
-// Create a comment for a specific post
-app.post('/post/:postId/comment', authenticateJWT, async (req, res) => {
-    const {postId} = req.params;
-    const {content} = req.body;
-    try {
-        await prismaClient.comment.create({
-            data: {
-                content,
-                postId: parseInt(postId),
-                authorId: req.session.userId
-            }
-
-        });
-        res.redirect(`/post/${postId}/comments`)
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: 'Error creating comment!'});
-    }
-});
-
-// Update a comment
-app.put('/post/:postId/comment/:commentId', authenticateJWT, async (req, res) => {
-    const {postId, commentId} = req.params;
-    const {content} = req.body;
-
-    try {
-        let comment = await prismaClient.comment.findUnique({
-            where: {
-                id: parseInt(commentId)
-            }
-        });
-        if (!comment) {
-            return res.status(404).json({message: 'Comment not found'});
-        }
-
-        // Check if the user is authorized to update the comment
-        if (comment.authorId !== req.session.userId && req.session.role !== "ADMIN") {
-            return res.status(403).json({message: 'Unauthorized to update this comment'});
-        }
-
-        // Update the comment
-        await prismaClient.comment.update({
-            where: {
-                id: parseInt(commentId)
-            },
-            data: {
-                content
-            }
-        });
-
-        res.redirect(`/post/${postId}/comments`);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: 'Error updating comment'});
-    }
-});
-
-
-app.delete('/post/:postId/comment/:commentId', authenticateJWT, async (req, res) => {
-    const {postId, commentId} = req.params;
-    try {
-        const comment = await prismaClient.comment.findUnique({
-            where: {
-                id: parseInt(commentId)
-            }
-        });
-        if (!comment) {
-            return res.status(404).json({message: 'Comment not found'});
-        }
-
-        // Check if the user is authorized to delete the comment
-        if (comment.authorId !== req.session.userId && req.session.role !== "ADMIN") {
-            return res.status(403).json({message: 'Unauthorized to delete this comment'});
-        }
-
-        // Delete the comment
-        await prismaClient.comment.delete({
-            where: {
-                id: parseInt(commentId)
-            }
-        });
-
-        res.redirect(`/post/${postId}/comments`);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: 'Error deleting comment'});
-    }
-
-});
-
-// Read all comments for a specific post
-app.get('/post/:postId/comments', async (req, res) => {
-    const {postId} = req.params;
-    try {
-        const comments = await prismaClient.comment.findMany({
-            where: {postId: parseInt(postId)},
-            orderBy: {
-                createdAt: 'desc'
-            },
-            include: {author: true},
-
-        });
-        res.render('views/comments.njk', {
-            comments: comments,
-            auth: isLogin(req),
-            userId: req.session.userId,
-            role: req.session.role,
-            postId:postId
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: 'Error fetching comments!'});
-    }
-});
 
 
 module.exports = app;
