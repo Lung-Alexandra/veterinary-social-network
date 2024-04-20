@@ -1,14 +1,9 @@
 const prismaClient = require("./../routes/prisma.js");
 const createPost = async (postInfo) => {
 
-    const {title, content, tags, type,filepath, userId} = postInfo;
+    const {title, content, tags, type,imagePath, userId} = postInfo;
 
-    let imagePath = null;
-    if (type === "TEXTIMAGE") {
-        if (filepath) {
-            imagePath = filepath;
-        }
-    }
+    let imgPath = type === "TEXTIMAGE"? imagePath: null;
 
     const tagNames = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "" && tag !== undefined);
     // console.log(tagNames);
@@ -27,7 +22,7 @@ const createPost = async (postInfo) => {
             authorId: userId,
             tags: {connect: tagRecords.map(tag => ({id: tag.id}))},
             type,
-            imagePath: imagePath
+            imagePath: imgPath
         },
         include: {tags: true}
     });
@@ -41,14 +36,9 @@ const getPost = async (id) => {
     });
 }
 const modifyPost = async (postInfo) => {
-    const {title, content, tags, type,filepath, id} = postInfo;
+    const {title, content, tags, type,imagePath, id} = postInfo;
 
-    let imagePath = null;
-    if (type === "TEXTIMAGE") {
-        if (filepath) {
-            imagePath = filepath;
-        }
-    }
+    let imgPath = type === "TEXTIMAGE"? imagePath: null;
 
     const tagNames = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "" && tag !== undefined);
     // console.log(tags)
@@ -66,7 +56,7 @@ const modifyPost = async (postInfo) => {
             content,
             tags: {connect: tagRecords.map(tag => ({id: tag.id}))},
             type,
-            imagePath: imagePath
+            imagePath: imgPath
         },
         include: {tags: true}
     });

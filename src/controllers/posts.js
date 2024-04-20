@@ -1,10 +1,10 @@
 const postsService = require('./../services/posts.js');
 const createPost = async (req, res, next) => {
     try {
-        const imgpath =  req.file ? req.file : null;
+        const imagePath =  req.file ? req.file.path : null;
         let postInfo = {
             ...req.body,
-            imgpath ,
+            imagePath ,
             userId: req.session.userId,
         }
         const result = await postsService.createPost(postInfo);
@@ -39,11 +39,11 @@ const getPost = async (req, res, next) => {
 };
 const modifyPost = async (req, res, next) => {
     const {id} = req.params
-    const ImagePath =  req.file ? req.file : null;
-    console.log(ImagePath)
+    const imagePath =  req.file ? req.file.path : null;
+
     let postInfo = {
         ...req.body,
-        ImagePath,
+        imagePath,
         id
     }
 
@@ -56,8 +56,7 @@ const modifyPost = async (req, res, next) => {
             return res.status(403).json({message: 'Unauthorized to update this post'});
         }
 
-        const idk = await postsService.modifyPost(postInfo);
-        console.log(idk)
+        await postsService.modifyPost(postInfo);
         console.log('Post updated successfully!');
         res.redirect('/');
 
