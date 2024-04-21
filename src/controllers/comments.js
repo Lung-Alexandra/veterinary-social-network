@@ -3,7 +3,7 @@ const {isLogin} = require("../routes/util");
 const getAllComments = async (req, res, next) => {
     const postId = req.postId;
     try {
-        const comments = await commentsService.getAllComments(postId);
+        const comments = await commentsService.getAllComments(parseInt(postId));
         res.render('views/comments.njk', {
             comments: comments,
             auth: isLogin(req),
@@ -22,7 +22,7 @@ const getComment = async (req, res, next) => {
     const {commentId} = req.params;
 
     try {
-        const comment = await commentsService.getComment(commentId);
+        const comment = await commentsService.getComment(parseInt(commentId));
         if (!comment) {
             return res.status(404).json({message: 'Comment not found'});
         }
@@ -43,7 +43,7 @@ const createComment = async (req, res, next) => {
     const postId = req.postId;
     const {content} = req.body;
     try {
-        await commentsService.createComment(content, postId, req.session.userId);
+        await commentsService.createComment(content, parseInt(postId), req.session.userId);
         res.redirect(`/post/${postId}/comments`)
     } catch (error) {
         console.error(error);
@@ -57,7 +57,7 @@ const updateComment = async (req, res, next) => {
     const {content} = req.body;
 
     try {
-        let comment = await commentsService.getComment(commentId);
+        let comment = await commentsService.getComment(parseInt(commentId));
         if (!comment) {
             return res.status(404).json({message: 'Comment not found'});
         }
@@ -68,7 +68,7 @@ const updateComment = async (req, res, next) => {
         }
 
         // Update the comment
-        await commentsService.updateComment(commentId, content);
+        await commentsService.updateComment(parseInt(commentId), content);
 
         res.redirect(`/post/${postId}/comments`);
     } catch (error) {
@@ -82,7 +82,7 @@ const deleteComment = async (req, res, next) => {
     const postId = req.postId;
     const {commentId} = req.params;
     try {
-        const comment = await commentsService.getComment(commentId)
+        const comment = await commentsService.getComment(parseInt(commentId))
         if (!comment) {
             return res.status(404).json({message: 'Comment not found'});
         }
@@ -93,7 +93,7 @@ const deleteComment = async (req, res, next) => {
         }
 
         // Delete the comment
-        await commentsService.deleteComment(commentId)
+        await commentsService.deleteComment(parseInt(commentId))
 
         res.redirect(`/post/${postId}/comments`);
     } catch (error) {

@@ -21,7 +21,7 @@ const getPost = async (req, res, next) => {
     const {id} = req.params;
 
     try {
-        const post = await postsService.getPost(id);
+        const post = await postsService.getPost(parseInt(id));
         if (!post) {
             return res.status(404).json({message: 'Post not found!'});
         }
@@ -48,7 +48,7 @@ const modifyPost = async (req, res, next) => {
     }
     delete req.session._method;
     try {
-        const post = await postsService.getPost(id);
+        const post = await postsService.getPost(parseInt(id));
         if (!post) {
             return res.status(404).json({message: 'Post not found!'});
         }
@@ -70,7 +70,7 @@ const modifyPost = async (req, res, next) => {
 const deletePost = async (req, res, next) => {
     const {id} = req.params;
     try {
-        const post = await postsService.getPost(id);
+        const post = await postsService.getPost(parseInt(id));
         if (!post) {
             return res.status(404).json({message: 'Post not found!'});
         }

@@ -5,7 +5,7 @@ const getUser = async (req, res, next) => {
     const {id} = req.params;
     if (req.session.userId === parseInt(id)) {
         try {
-            const user = await usersService.getUser(id);
+            const user = await usersService.getUser(parseInt(id));
             if (!user) {
                 return res.status(404).json({message: 'User not found!'});
             }
@@ -26,7 +26,7 @@ const modifyUser = async (req, res, next) => {
     const {name, email, bio} = req.body;
     if (req.session.userId === parseInt(id) || req.session.role === "ADMIN") {
         try {
-            const user = await usersService.modifyUser(id, name, email, bio);
+            const user = await usersService.modifyUser(parseInt(id), name, email, bio);
             if (!user) {
                 return res.status(404).json({message: 'User not found!'});
             }
@@ -45,11 +45,11 @@ const deleteUser = async (req, res, next) => {
     const {id} = req.params;
     if (req.session.userId === parseInt(id) || req.session.role === "ADMIN") {
         try {
-            const user = await usersService.getUser(id);
+            const user = await usersService.getUser(parseInt(id));
             if (!user) {
                 return res.status(404).json({message: 'User not found!'});
             }
-            await usersService.deleteUser(id);
+            await usersService.deleteUser(parseInt(id));
             console.log('User deleted successfully!');
             // if user deletes his account redirect to main page
             if (req.session.userId === parseInt(id)) {

@@ -1,7 +1,7 @@
 const prismaClient = require("./../routes/prisma.js");
 const getAllComments = async (postId)=> {
     return prismaClient.comment.findMany({
-        where: {postId: parseInt(postId)},
+        where: {postId: postId},
         orderBy: {
             createdAt: 'desc'
         },
@@ -13,7 +13,7 @@ const getComment = async (commentId) => {
 
     return prismaClient.comment.findUnique({
         where: {
-            id: parseInt(commentId)
+            id: commentId
         }
     });
 };
@@ -21,7 +21,7 @@ const createComment = async (content, postId, userId) => {
     return prismaClient.comment.create({
         data: {
             content,
-            postId: parseInt(postId),
+            postId: postId,
             authorId: userId
         }
 
@@ -30,7 +30,7 @@ const createComment = async (content, postId, userId) => {
 const updateComment = async (commentId, content) => {
     return prismaClient.comment.update({
         where: {
-            id: parseInt(commentId)
+            id: commentId
         },
         data: {
             content
@@ -40,7 +40,7 @@ const updateComment = async (commentId, content) => {
 const deleteComment = async (commentId) => {
     return prismaClient.comment.delete({
         where: {
-            id: parseInt(commentId)
+            id: commentId
         }
     });
 }
