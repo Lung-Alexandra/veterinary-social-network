@@ -66,7 +66,7 @@ const modifyPost = async (postInfo) => {
 const deletePost =async (post)=>{
     if (post.comments) {
         await Promise.all(post.comments.map(async (comment) => {
-            await prismaClient.comment.delete({where: {id: comment.id}});
+            await commentServices.deleteComment(comment.id);
         }));
     }
     // Remove the associations with tags
