@@ -2,7 +2,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const prismaClient = require('./prisma.js');
 const bcrypt = require('bcrypt');
-const {generateToken} = require('./jwt.js');
+
 require('dotenv').config();
 
 passport.use(new GoogleStrategy({

@@ -1,18 +1,21 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const methodOverride = require('method-override');
-const prismaClient = require('./prisma.js');
-const {verifyToken, generateToken} = require('./jwt.js');
-const passport = require('./oauth');
-const uploadMiddleware = require("./../middlewares/uploadMiddleware");
-const {authenticateJWT} = require('./../middlewares/jwtMiddleware.js');
-const {isLogin,isAdmin} = require('./../routes/util.js');
+const methodOverride = require("method-override");
+const prismaClient = require('../utils/prisma.js');
+const passport = require('../utils/oauth');
+//functions
+const {generateToken} = require('./../utils/jwt.js');
+const {isLogin,hashPassword, comparePassword} = require('../utils/util.js');
+// routes
 const postRouter = require("./../routes/posts.js");
 const userRouter = require("./../routes/users.js");
 const commentRouter = require("./../routes/comments.js");
+// middleware
 const {extractPostId} = require("./../middlewares/extractParamsMiddleware");
+const {authenticateJWT} = require('./../middlewares/jwtMiddleware.js');
+const {isAdmin} = require('./../middlewares/adminMiddleware.js');
+
 const app = express.Router();
 
 
@@ -31,15 +34,20 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-// Hash password before saving user
-async function hashPassword(password) {
-    const salt = await bcrypt.genSalt(10);
-    return await bcrypt.hash(password, salt);
-}
-
-
-
+app.use(methodOverride(function (req, res) {
+    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+        let method = req.body._method
+        // console.log(method)
+        delete req.body._method
+        return method
+    }
+    if(req.session._method){
+        let method = req.session._method
+        // console.log(method)
+        delete req.session._method
+        return method
+    }
+}))
 
 // Rute pentru autentificarea OAuth cu Google
 app.get('/auth/google',
@@ -56,21 +64,6 @@ app.get('/auth/google/callback',
         res.redirect('/');
     });
 
-
-app.use(methodOverride(function (req, res) {
-    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
-        let method = req.body._method
-        // console.log(method)
-        delete req.body._method
-        return method
-    }
-    if(req.session._method){
-        let method = req.session._method
-        // console.log(method)
-        delete req.session._method
-        return method
-    }
-}))
 
 app.get('/signup', (req, res) => {
     res.render('views/signup.njk', {messages: res.locals.messages});
@@ -108,7 +101,7 @@ app.post('/login', async (req, res) => {
             return res.redirect('/login');
 
         }
-        const passwordMatch = await bcrypt.compare(password, user.password);
+        const passwordMatch =  comparePassword(password,user.password);
         if (!passwordMatch) {
             console.log('Invalid email or password!');
             return res.redirect('/login');
@@ -178,8 +171,10 @@ app.get('/', async (req, res) => {
         res.status(500).json({message: 'Error fetching posts!'});
     }
 });
+
 // User CRUD operations
 app.use("/user",userRouter);
+
 // Read all users (implement access control for admins only)
 app.get('/users', authenticateJWT, isAdmin, async (req, res) => {
     try {
@@ -190,23 +185,7 @@ app.get('/users', authenticateJWT, isAdmin, async (req, res) => {
         res.status(500).json({message: 'Error fetching users!'});
     }
 });
-app.get('/editprofile/:id', authenticateJWT, async (req, res) => {
-    const {id} = req.params;
-    if (req.session.userId === parseInt(id) || req.session.role === "ADMIN") {
-        try {
-            const user = await prismaClient.user.findUnique({where: {id: parseInt(id)}});
-            if (!user) {
-                return res.status(404).json({message: 'User not found!'});
-            }
-            res.render('views/editProfile.njk', {user: user});
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({message: 'Error fetching user!'});
-        }
-    } else {
-        return res.status(403).json({message: 'Unauthorized access'});
-    }
-});
+
 
 // Comment CRUD operations
 app.use("/post/:postId",extractPostId,commentRouter)

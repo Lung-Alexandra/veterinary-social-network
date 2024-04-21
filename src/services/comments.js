@@ -1,4 +1,4 @@
-const prismaClient = require("./../routes/prisma.js");
+const prismaClient = require("../utils/prisma.js");
 const getAllComments = async (postId)=> {
     return prismaClient.comment.findMany({
         where: {postId: postId},

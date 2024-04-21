@@ -1,4 +1,4 @@
-const prismaClient = require("./../routes/prisma.js");
+const prismaClient = require("../utils/prisma.js");
 const commentServices = require("./../services/comments.js");
 const createPost = async (postInfo) => {
 
@@ -36,13 +36,13 @@ const getPost = async (id) => {
         include: {author: true, tags: true, comments: true},
     });
 }
-const modifyPost = async (postInfo) => {
+const modifyPost = async (old_post,postInfo) => {
     const {title, content, tags, type, imagePath, id} = postInfo;
 
-    let imgPath = type === "TEXTIMAGE" ? imagePath : null;
+    let imgPath = type === "TEXTIMAGE" ? (imagePath?imagePath:old_post.imagePath) : null;
 
     const tagNames = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "" && tag !== undefined);
-    // console.log(tags)
+
     const tagRecords = await Promise.all(tagNames.map(async tagName => {
         return prismaClient.tag.upsert({
             where: {name: tagName},

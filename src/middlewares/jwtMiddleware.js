@@ -1,4 +1,4 @@
-const {verifyToken} = require("../routes/jwt");
+const {verifyToken} = require("../utils/jwt");
 
 function authenticateJWT(req, res, next) {
     const token = req.session.token;

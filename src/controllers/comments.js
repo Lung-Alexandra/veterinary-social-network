@@ -1,5 +1,5 @@
 const commentsService = require('./../services/comments.js');
-const {isLogin} = require("../routes/util");
+const {isLogin} = require("../utils/util");
 const getAllComments = async (req, res, next) => {
     const postId = req.postId;
     try {

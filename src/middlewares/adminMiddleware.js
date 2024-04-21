@@ -1,6 +1,3 @@
-function isLogin(req) {
-    return req.session.token !== undefined;
-}
 async function isAdmin(req, res, next) {
 
     if (req.session.role === "ADMIN") {
@@ -10,4 +7,4 @@ async function isAdmin(req, res, next) {
     }
 
 }
-module.exports={isLogin, isAdmin}
+module.exports={isAdmin}

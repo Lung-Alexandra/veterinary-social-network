@@ -1,5 +1,24 @@
 const usersService = require('./../services/users.js');
 
+const getProfile = async (req, res, next)  => {
+    const {id} = req.params;
+    if (req.session.userId === parseInt(id) || req.session.role === "ADMIN") {
+        try {
+            const user = await usersService.getUser(parseInt(id));
+            if (!user) {
+                return res.status(404).json({message: 'User not found!'});
+            }
+            res.render('views/editProfile.njk', {user: user});
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({message: 'Error fetching user!'});
+            next(error)
+        }
+    } else {
+        return res.status(403).json({message: 'Unauthorized access'});
+    }
+}
+
 const getUser = async (req, res, next) => {
 
     const {id} = req.params;
@@ -78,5 +97,6 @@ const deleteUser = async (req, res, next) => {
 module.exports = {
     getUser,
     modifyUser,
-    deleteUser
+    deleteUser,
+    getProfile
 }

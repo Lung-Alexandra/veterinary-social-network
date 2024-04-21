@@ -1,4 +1,4 @@
-const prismaClient = require("./../routes/prisma.js");
+const prismaClient = require("../utils/prisma.js");
 const postServices = require("./../services/posts.js");
 const commentServices = require("./../services/comments.js");
 const getUser = async (id) => {
