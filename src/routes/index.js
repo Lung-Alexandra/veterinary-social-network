@@ -12,6 +12,7 @@ const {isLogin,isAdmin} = require('./../routes/util.js');
 const postRouter = require("./../routes/posts.js");
 const userRouter = require("./../routes/users.js");
 const commentRouter = require("./../routes/comments.js");
+const {extractPostId} = require("./../middlewares/extractParamsMiddleware");
 const app = express.Router();
 
 
@@ -208,7 +209,7 @@ app.get('/editprofile/:id', authenticateJWT, async (req, res) => {
 });
 
 // Comment CRUD operations
-app.use("/post",commentRouter)
+app.use("/post/:postId",extractPostId,commentRouter)
 
 // Post CRUD operations
 app.use("/post",postRouter);

@@ -51,7 +51,21 @@ const deleteUser = async (req, res, next) => {
             }
             await usersService.deleteUser(id);
             console.log('User deleted successfully!');
-            res.redirect('/users');
+            // if user deletes his account redirect to main page
+            if (req.session.userId === parseInt(id)) {
+                req.session.destroy(err => {
+                    if (err) {
+                        console.error('Error destroying session:', err);
+                        res.status(500).json({message: 'Error deleting user session!'});
+                        next(err);
+                    }
+                    res.redirect('/');
+                });
+            } else {
+                // if it's not user it means it's admin that delete another account
+                res.redirect('/users');
+            }
+
         } catch (error) {
             console.error(error);
             res.status(500).json({message: 'Error deleting user!'});

@@ -1,7 +1,7 @@
 const commentsService = require('./../services/comments.js');
 const {isLogin} = require("../routes/util");
-const getAllComments = async (req, res, next)  => {
-    const {postId} = req.params;
+const getAllComments = async (req, res, next) => {
+    const postId = req.postId;
     try {
         const comments = await commentsService.getAllComments(postId);
         res.render('views/comments.njk', {
@@ -9,15 +9,17 @@ const getAllComments = async (req, res, next)  => {
             auth: isLogin(req),
             userId: req.session.userId,
             role: req.session.role,
-            postId:postId
+            postId: postId
         });
     } catch (error) {
         console.error(error);
         res.status(500).json({message: 'Error fetching comments!'});
         next(error)
-    }}
-const getComment =  async (req, res, next) => {
-    const {postId, commentId} = req.params;
+    }
+}
+const getComment = async (req, res, next) => {
+    const postId = req.postId;
+    const {commentId} = req.params;
 
     try {
         const comment = await commentsService.getComment(commentId);
@@ -38,10 +40,10 @@ const getComment =  async (req, res, next) => {
 
 };
 const createComment = async (req, res, next) => {
-    const {postId} = req.params;
+    const postId = req.postId;
     const {content} = req.body;
     try {
-        await commentsService.createComment(content, postId,req.session.userId);
+        await commentsService.createComment(content, postId, req.session.userId);
         res.redirect(`/post/${postId}/comments`)
     } catch (error) {
         console.error(error);
@@ -50,34 +52,35 @@ const createComment = async (req, res, next) => {
     }
 };
 const updateComment = async (req, res, next) => {
+    const postId = req.postId;
+    const {commentId} = req.params;
+    const {content} = req.body;
 
-        const {postId, commentId} = req.params;
-        const {content} = req.body;
-
-        try {
-            let comment = await commentsService.getComment(commentId);
-            if (!comment) {
-                return res.status(404).json({message: 'Comment not found'});
-            }
-
-            // Check if the user is authorized to update the comment
-            if (comment.authorId !== req.session.userId && req.session.role !== "ADMIN") {
-                return res.status(403).json({message: 'Unauthorized to update this comment'});
-            }
-
-            // Update the comment
-           await commentsService.updateComment(commentId,content);
-
-            res.redirect(`/post/${postId}/comments`);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({message: 'Error updating comment'});
-            next(error)
+    try {
+        let comment = await commentsService.getComment(commentId);
+        if (!comment) {
+            return res.status(404).json({message: 'Comment not found'});
         }
 
+        // Check if the user is authorized to update the comment
+        if (comment.authorId !== req.session.userId && req.session.role !== "ADMIN") {
+            return res.status(403).json({message: 'Unauthorized to update this comment'});
+        }
+
+        // Update the comment
+        await commentsService.updateComment(commentId, content);
+
+        res.redirect(`/post/${postId}/comments`);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Error updating comment'});
+        next(error)
+    }
+
 }
-const deleteComment =  async (req, res, next) => {
-    const {postId, commentId} = req.params;
+const deleteComment = async (req, res, next) => {
+    const postId = req.postId;
+    const {commentId} = req.params;
     try {
         const comment = await commentsService.getComment(commentId)
         if (!comment) {
@@ -99,7 +102,7 @@ const deleteComment =  async (req, res, next) => {
         next(error)
     }
 }
-module.exports={
+module.exports = {
     getAllComments,
     getComment,
     createComment,

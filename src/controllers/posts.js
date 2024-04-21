@@ -1,10 +1,10 @@
 const postsService = require('./../services/posts.js');
 const createPost = async (req, res, next) => {
     try {
-        const imagePath =  req.file ? req.file.path : null;
+        const imagePath = req.file ? req.file.path : null;
         let postInfo = {
             ...req.body,
-            imagePath ,
+            imagePath,
             userId: req.session.userId,
         }
         const result = await postsService.createPost(postInfo);
@@ -39,14 +39,14 @@ const getPost = async (req, res, next) => {
 };
 const modifyPost = async (req, res, next) => {
     const {id} = req.params
-    const imagePath =  req.file ? req.file.path : null;
+    const imagePath = req.file ? req.file.path : null;
 
     let postInfo = {
         ...req.body,
         imagePath,
         id
     }
-
+    delete req.session._method;
     try {
         const post = await postsService.getPost(id);
         if (!post) {
@@ -67,7 +67,7 @@ const modifyPost = async (req, res, next) => {
     }
 
 }
-const deletePost = async (req,res,next)=>{
+const deletePost = async (req, res, next) => {
     const {id} = req.params;
     try {
         const post = await postsService.getPost(id);

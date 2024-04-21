@@ -3,6 +3,7 @@ const usersController = require("./../controllers/users.js");
 const {authenticateJWT} = require("../middlewares/jwtMiddleware");
 
 const router = express.Router();
+
 // Read a specific user by ID
 router.route("/:id").get( authenticateJWT,usersController.getUser);
 
