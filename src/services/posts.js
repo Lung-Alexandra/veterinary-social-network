@@ -36,33 +36,50 @@ const getPost = async (id) => {
         include: {author: true, tags: true, comments: true},
     });
 }
-const modifyPost = async (old_post,postInfo) => {
-    const {title, content, tags, type, imagePath, id} = postInfo;
+const modifyPost = async (old_post, postInfo) => {
+    const { title, content, tags, type, imagePath, id } = postInfo;
 
-    let imgPath = type === "TEXTIMAGE" ? (imagePath?imagePath:old_post.imagePath) : null;
+    let imgPath = type === "TEXTIMAGE" ? (imagePath ? imagePath : old_post.imagePath) : null;
 
     const tagNames = tags.split(',').map(tag => tag.trim()).filter(tag => tag !== "" && tag !== undefined);
 
     const tagRecords = await Promise.all(tagNames.map(async tagName => {
         return prismaClient.tag.upsert({
-            where: {name: tagName},
+            where: { name: tagName },
             update: {},
-            create: {name: tagName}
+            create: { name: tagName }
         });
     }));
+
+    // Find existing tag IDs associated with the post
+    const existingTagIds = old_post.tags.map(tag => tag.id);
+
+    // Find tag IDs that need to be disconnected
+    const tagsToRemove = old_post.tags.filter(tag => !tagNames.includes(tag.name));
+
+    // Disconnect tags from the post
+    await Promise.all(tagsToRemove.map(async tagToRemove => {
+        return prismaClient.post.update({
+            where: { id: parseInt(id) },
+            data: {
+                tags: { disconnect: { id: tagToRemove.id } }
+            }
+        });
+    }));
+
     return prismaClient.post.update({
-        where: {id: parseInt(id)},
+        where: { id: parseInt(id) },
         data: {
             title,
             content,
-            tags: {connect: tagRecords.map(tag => ({id: tag.id}))},
+            tags: { connect: tagRecords.map(tag => ({ id: tag.id })) },
             type,
             imagePath: imgPath
         },
-        include: {tags: true}
+        include: { tags: true }
     });
-
 }
+
 const deletePost =async (post)=>{
     if (post.comments) {
         await Promise.all(post.comments.map(async (comment) => {

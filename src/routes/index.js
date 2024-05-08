@@ -15,6 +15,7 @@ const commentRouter = require("./../routes/comments.js");
 const {extractPostId} = require("./../middlewares/extractParamsMiddleware");
 const {authenticateJWT} = require('./../middlewares/jwtMiddleware.js');
 const {isAdmin} = require('./../middlewares/adminMiddleware.js');
+const {logger} = require('./../utils/logger.js');
 
 const app = express.Router();
 
@@ -60,7 +61,7 @@ app.get('/auth/google/callback',
         req.session.userId = req.user.id;
         req.session.role = req.user.role;
 
-        console.log("Successfully authenticated with Google Drive API!")
+        logger.info(`Successfully authenticated with Google Drive API! ${req.user.id},${req.user.email} `);
         res.redirect('/');
     });
 
@@ -74,13 +75,13 @@ app.post('/signup', async (req, res) => {
 
     try {
         const hashedPassword = await hashPassword(password);
-        await prismaClient.user.create({
+        let user = await prismaClient.user.create({
             data: {email, password: hashedPassword, name},
         });
-        console.log('User created successfully!');
+        logger.info(`User created successfully!${user.id},${user.email}`);
         res.redirect('/login');
     } catch (error) {
-        console.log('Error creating user!');
+        logger.info('Error creating user!');
         res.redirect('/signup');
     }
 
@@ -97,35 +98,39 @@ app.post('/login', async (req, res) => {
     try {
         const user = await prismaClient.user.findUnique({where: {email}});
         if (!user) {
-            console.log('Invalid email or password!');
+            logger.info('Invalid email!');
             return res.redirect('/login');
 
         }
-        const passwordMatch =  comparePassword(password,user.password);
+        const passwordMatch =  await comparePassword(password,user.password);
         if (!passwordMatch) {
-            console.log('Invalid email or password!');
+            logger.info('Invalid password!');
             return res.redirect('/login');
 
         }
-        console.log('Login successful!');
+        logger.info(`Login successful! ${user.id}`);
         req.session.userId = user.id;
         req.session.token = generateToken(user.id)
         req.session.role = user.role;
         res.redirect('/');
     } catch (error) {
-        console.log(error + ' Error logging in!');
+        logger.error(error + ' Error logging in!');
         res.redirect('/login');
     }
 });
 
 app.get('/logout', (req, res) => {
     // sterge informatiile de autentificare stocate in sesiune
-    req.session.destroy((err) => {
-        if (err) {
-            console.error('Error destroying session:', err);
-            return res.status(500).json({message: 'Error logging out'});
-        }
-        res.redirect('/login');
+    req.logout(function(err){
+        req.session.destroy((err) => {
+            if (err) {
+                logger.info('Error destroying session:', err);
+                return res.status(500).json({message: 'Error logging out'});
+            }
+            logger.info('Session destroyed successfully!');
+            logger.info('Logout user!');
+            res.redirect('/login');
+        });
     });
 });
 
@@ -169,7 +174,7 @@ app.get('/', async (req, res) => {
             role: req.session.role
         });
     } catch (error) {
-        console.error(error);
+        logger.info(error);
         res.status(500).json({message: 'Error fetching posts!'});
     }
 });
@@ -181,9 +186,10 @@ app.use("/user",userRouter);
 app.get('/users', authenticateJWT, isAdmin, async (req, res) => {
     try {
         const users = await prismaClient.user.findMany();
+        logger.info("Displayed users!");
         res.render('views/users.njk', {users: users});
     } catch (error) {
-        console.error(error);
+        logger.info(error);
         res.status(500).json({message: 'Error fetching users!'});
     }
 });

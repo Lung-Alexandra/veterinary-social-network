@@ -26,7 +26,8 @@
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
     "process": "^0.11.10",
-    "swagger-ui-express": "^5.0.0"
+    "swagger-ui-express": "^5.0.0",
+    "winston": "^3.13.0"
   },
   "devDependencies": {
     "prisma": "^5.12.1",

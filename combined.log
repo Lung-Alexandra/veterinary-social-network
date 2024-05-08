@@ -1,0 +1,36 @@
+{"level":"info","message":"Login successful! 53"}
+{"level":"info","message":"Session destroyed successfully!"}
+{"level":"info","message":"Logout user!"}
+{"level":"info","message":"Login successful! 53"}
+{"level":"info","message":"Session destroyed successfully!"}
+{"level":"info","message":"Logout user!"}
+{"level":"info","message":"Login successful! 53"}
+{"level":"info","message":"Session destroyed successfully!"}
+{"level":"info","message":"Logout user!"}
+{"level":"info","message":"Login successful! 53"}
+{"level":"info","message":"Session destroyed successfully!"}
+{"level":"info","message":"Logout user!"}
+{"level":"info","message":"Login successful! 53"}
+{"level":"info","message":"Session destroyed successfully!"}
+{"level":"info","message":"Logout user!"}
+{"level":"info","message":"Login successful! 53"}
+{"level":"info","message":"Session destroyed successfully!"}
+{"level":"info","message":"Logout user!"}
+{"level":"info","message":"Login successful! 53"}
+{"level":"info","message":"Session destroyed successfully!"}
+{"level":"info","message":"Logout user!"}
+{"level":"info","message":"Login successful! 53"}
+{"level":"info","message":"Session destroyed successfully!"}
+{"level":"info","message":"Logout user!"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Login successful! 53"}
+{"level":"info","message":"Post 36 modified"}
+{"level":"info","message":"Post 36 updated successfully!"}
+{"level":"info","message":"Displayed users!"}
+{"clientVersion":"5.12.1","code":"P2025","level":"info","meta":{"cause":"Record to delete does not exist.","modelName":"Comment"},"name":"PrismaClientKnownRequestError"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Login successful! 53"}
+{"level":"info","message":"Displayed users!"}
+{"level":"info","message":"User 73 deleted successfully!"}
+{"level":"info","message":"Displayed users!"}

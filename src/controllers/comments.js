@@ -1,5 +1,6 @@
 const commentsService = require('./../services/comments.js');
 const {isLogin} = require("../utils/util");
+const {logger} = require("../utils/logger");
 const getAllComments = async (req, res, next) => {
     const postId = req.postId;
     try {
@@ -12,7 +13,7 @@ const getAllComments = async (req, res, next) => {
             postId: postId
         });
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         res.status(500).json({message: 'Error fetching comments!'});
         next(error)
     }
@@ -24,16 +25,22 @@ const getComment = async (req, res, next) => {
     try {
         const comment = await commentsService.getComment(parseInt(commentId));
         if (!comment) {
+            logger.info(`Comment ${commentId} not found`);
             return res.status(404).json({message: 'Comment not found'});
         }
+
+        // Check if the user is authorized to delete the comment
         if (comment.authorId !== req.session.userId && req.session.role !== "ADMIN") {
-            return res.status(403).json({message: 'Unauthorized to update this comment'});
+            logger.info(`Unauthorized to update this post. User ${comment.authorId}`);
+            return res.status(403).json({message: 'Unauthorized to delete this comment'});
         }
+
         req.session._method = "put";
+
         res.render('views/addcomm.njk', {postId: postId, comment: comment, method: "put"})
 
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         res.status(500).json({message: 'Error fetching post!'});
         next(error)
     }
@@ -44,9 +51,10 @@ const createComment = async (req, res, next) => {
     const {content} = req.body;
     try {
         await commentsService.createComment(content, parseInt(postId), req.session.userId);
+        logger.info(`Created comment for ${postId}`);
         res.redirect(`/post/${postId}/comments`)
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         res.status(500).json({message: 'Error creating comment!'});
         next(error)
     }
@@ -59,20 +67,22 @@ const updateComment = async (req, res, next) => {
     try {
         let comment = await commentsService.getComment(parseInt(commentId));
         if (!comment) {
+            logger.info(`Comment ${commentId} not found`);
             return res.status(404).json({message: 'Comment not found'});
         }
 
-        // Check if the user is authorized to update the comment
+        // Check if the user is authorized to delete the comment
         if (comment.authorId !== req.session.userId && req.session.role !== "ADMIN") {
-            return res.status(403).json({message: 'Unauthorized to update this comment'});
+            logger.info(`Unauthorized to update this post. User ${comment.authorId}`);
+            return res.status(403).json({message: 'Unauthorized to delete this comment'});
         }
 
         // Update the comment
         await commentsService.updateComment(parseInt(commentId), content);
-
+        logger.info(`Create comment ${id} successfully`);
         res.redirect(`/post/${postId}/comments`);
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         res.status(500).json({message: 'Error updating comment'});
         next(error)
     }
@@ -84,20 +94,22 @@ const deleteComment = async (req, res, next) => {
     try {
         const comment = await commentsService.getComment(parseInt(commentId))
         if (!comment) {
+            logger.info(`Comment ${commentId} not found`);
             return res.status(404).json({message: 'Comment not found'});
         }
 
         // Check if the user is authorized to delete the comment
         if (comment.authorId !== req.session.userId && req.session.role !== "ADMIN") {
+            logger.info(`Unauthorized to update this post. User ${comment.authorId}`);
             return res.status(403).json({message: 'Unauthorized to delete this comment'});
         }
 
         // Delete the comment
         await commentsService.deleteComment(parseInt(commentId))
-
+        logger.info( `Created comment ${comment.id} of user ${comment.authorId}`);
         res.redirect(`/post/${postId}/comments`);
     } catch (error) {
-        console.error(error);
+        logger.error(error);
         res.status(500).json({message: 'Error deleting comment'});
         next(error)
     }

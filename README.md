@@ -157,6 +157,19 @@ Renders a form to be filled in order to create a new post
 
 Available only for users and admins.
 
+Request body:
+
+  ``` json
+    {
+    "title": <String>,
+    "content": <String>,
+    "tags": <String>,
+    "type": <String>,
+    "imagePath": <String>,
+    "userId": <Integer>,
+   }
+  ```
+
 ### GET : http://localhost:3000/post/:id
 
 Available only for users and admins.
@@ -167,9 +180,24 @@ Renders a form to be filled in order to modify a post
 
 Available only for users and admins.
 
+Request body:
+
+``` json
+    {
+    "title": <String>,
+    "content": <String>,
+    "tags": <String>,
+    "type": <String>,
+    "imagePath": <String>,
+    "userId": <Integer>,
+   }
+  ```
+
 ### DELETE: http://localhost:3000/post/:id
 
 Available only for users and admins.
+
+Used for deleting a specific post.
 
 ## <u>User</u>
 
@@ -193,6 +221,16 @@ Renders a form to be filled in order to edit profile information.
 
 Available only for users and admins.
 
+Request body:
+
+``` json
+    {
+     "name": <String>,
+     "email": <String>, 
+     "bio": <String>
+    }
+```
+
 ### GET : http://localhost:3000/users
 
 Only for admins.
@@ -213,13 +251,29 @@ Available only for users and admins.
 
 Available only for users and admins.
 
+Request body:
+ ``` json
+    {
+     "content": <String>
+    }
+```
+
 ### GET : http://localhost:3000/post/:postId/comment/:commentId
 
 Available only for users and admins.
 
+
 ### PUT: http://localhost:3000/post/:postId/comment/:commentId
 
 Available only for users and admins.
+
+Request body:
+ ``` json
+    {
+     "content": <String>
+    }
+```
+
 
 ### DELETE: http://localhost:3000/post/:postId/comment/:commentId
 
