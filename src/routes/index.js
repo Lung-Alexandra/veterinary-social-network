@@ -131,14 +131,15 @@ app.get('/logout', (req, res) => {
 
 app.get('/', async (req, res) => {
     try {
-        const {page = 1, sortOption, authorFilter} = req.query;
+        const {page = 1, sortOption, tagFilter} = req.query;
         const perPage = 3
         const offset = (page - 1) * perPage;
         const totalCount = await prismaClient.post.count({
             where: {
-                author: authorFilter ? {
-                    name: {contains: authorFilter}
-                } : undefined
+                tags: tagFilter ? { some: { name: { contains: tagFilter } } } : undefined
+                // author: authorFilter ? {
+                //     name: {contains: authorFilter}
+                // } : undefined
             }
         });
         const totalPages = Math.ceil(totalCount / perPage);
@@ -148,9 +149,10 @@ app.get('/', async (req, res) => {
                 createdAt: sortOption === 'createdAtAsc' ? 'asc' : 'desc'
             },
             where: {
-                author: authorFilter ? {
-                    name: {contains: authorFilter}
-                } : undefined
+                tags: tagFilter ? { some: { name: { contains: tagFilter } } } : undefined
+                // author: authorFilter ? {
+                //     name: {contains: authorFilter}
+                // } : undefined
             },
             skip: offset,
             take: perPage
@@ -161,7 +163,7 @@ app.get('/', async (req, res) => {
             auth: isLogin(req),
             currentPage: parseInt(page),
             sortOption,
-            authorFilter,
+            tagFilter,
             totalPages,
             userId: req.session.userId,
             role: req.session.role
