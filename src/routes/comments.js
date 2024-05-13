@@ -1,5 +1,7 @@
 const express = require("express");
 const commentsController = require("./../controllers/comments.js");
+const validateComment = require("./../middlewares/validatePost.js");
+
 const {authenticateJWT} = require("../middlewares/jwtMiddleware");
 
 const router = express.Router();
@@ -19,11 +21,11 @@ router.route('/comment/:commentId').get(authenticateJWT, commentsController.getC
 
 
 // Create a comment for a specific post
-router.route('/comment').post(authenticateJWT, commentsController.createComment)
+router.route('/comment').post(authenticateJWT,validateComment, commentsController.createComment)
 
 
 // Update a comment
-router.route('/comment/:commentId').put(authenticateJWT, commentsController.updateComment)
+router.route('/comment/:commentId').put(authenticateJWT,validateComment, commentsController.updateComment)
 
 router.route('/comment/:commentId').delete(authenticateJWT, commentsController.deleteComment)
 

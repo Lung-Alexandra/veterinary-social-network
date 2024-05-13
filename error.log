@@ -1,2 +1,8 @@
 {"clientVersion":"5.12.1","level":"error","name":"PrismaClientValidationError"}
 {"clientVersion":"5.12.1","level":"error","name":"PrismaClientValidationError"}
+{"clientVersion":"5.12.1","code":"P2002","level":"error","meta":{"modelName":"User","target":["email"]},"name":"PrismaClientKnownRequestError"}
+{"clientVersion":"5.12.1","code":"P2002","level":"error","meta":{"modelName":"User","target":["email"]},"name":"PrismaClientKnownRequestError"}
+{"clientVersion":"5.12.1","code":"P2002","level":"error","meta":{"modelName":"User","target":["email"]},"name":"PrismaClientKnownRequestError"}
+{"clientVersion":"5.12.1","code":"P2002","level":"error","meta":{"modelName":"User","target":["email"]},"name":"PrismaClientKnownRequestError"}
+{"clientVersion":"5.12.1","code":"P2002","level":"error","meta":{"modelName":"User","target":["email"]},"name":"PrismaClientKnownRequestError"}
+{"clientVersion":"5.12.1","code":"P2002","level":"error","meta":{"modelName":"User","target":["email"]},"name":"PrismaClientKnownRequestError"}

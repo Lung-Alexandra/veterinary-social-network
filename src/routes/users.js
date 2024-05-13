@@ -11,7 +11,7 @@ router.route("/:id").get( authenticateJWT,usersController.getUser);
 router.route("/:id").put( authenticateJWT, usersController.modifyUser);
 router.route('/editProfile/:id').get( authenticateJWT, usersController.getProfile);
 
-// Delete a user (implement access control for admins only)
+// Delete a user
 router.route("/:id").delete( authenticateJWT, usersController.deleteUser);
 
 module.exports=router;

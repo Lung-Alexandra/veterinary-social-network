@@ -50,10 +50,15 @@ const modifyUser = async (req, res, next) => {
     const {name, email, bio} = req.body;
     if (req.session.userId === parseInt(id) || req.session.role === "ADMIN") {
         try {
-            const user = await usersService.modifyUser(parseInt(id), name, email, bio);
+            const user = await usersService.getUser(parseInt(id))
             if (!user) {
                 logger.info(`User ${id} not found`);
                 return res.status(404).json({message: 'User not found!'});
+            }
+
+            await usersService.modifyUser(parseInt(id), name, email, bio);
+            if(email !== user.email) {
+                await usersService.deleteUser(parseInt(id));
             }
             logger.info(`User ${user.id} updated successfully!`);
             res.redirect(`/user/${id}`)

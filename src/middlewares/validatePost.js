@@ -1,14 +1,12 @@
-const httpError = require("../utils/httpError.js");
+const {validatePostFields} = require("./../validations/posts.js");
 
-const validate = (validationSchema) => (req, res, next) => {
-    const validationResult = validationSchema.validate(req.body);
-
-    if (validationResult.error) {
-        let err = new httpError(400, validationResult.error.details[0].message)
-        return next(err);
+const validatePost = async (req, res, next) => {
+    try {
+        await validatePostFields.validateAsync(req.body);
+        next();
+    } catch (error) {
+        res.status(500).json({message: `${error}`});
     }
-
-    next();
 };
 
-module.exports = validate;
+module.exports = validatePost;

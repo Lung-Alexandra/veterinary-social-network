@@ -34,18 +34,26 @@
     </form>
     <button type="submit"><a href="/">Back</a></button>
     <script>
-        const typeSelect = document.getElementById('type');
-        let imageLabel = document.querySelector('label[for="imagePath"]');
-        let imagePathInput = document.getElementById('imagePath');
+        document.addEventListener("DOMContentLoaded", function() {
+            const postType = "{{ post.type if post else '' }}";
+            const typeSelect = document.getElementById('type');
+            let imageLabel = document.querySelector('label[for="imagePath"]');
+            let imagePathInput = document.getElementById('imagePath');
 
-        typeSelect.addEventListener('change', function () {
-            if (typeSelect.value === 'TEXTIMAGE') {
-                imageLabel.style.display = 'block';
-                imagePathInput.style.display = 'block';
-            } else {
+            if (postType !== "TEXTIMAGE") {
                 imageLabel.style.display = 'none';
                 imagePathInput.style.display = 'none';
             }
+
+            typeSelect.addEventListener('change', function () {
+                if (typeSelect.value === 'TEXTIMAGE') {
+                    imageLabel.style.display = 'block';
+                    imagePathInput.style.display = 'block';
+                } else {
+                    imageLabel.style.display = 'none';
+                    imagePathInput.style.display = 'none';
+                }
+            });
         });
     </script>
 </body>
