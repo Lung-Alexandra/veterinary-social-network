@@ -1,7 +1,5 @@
 const express = require("express");
-const validate = require("./../middlewares/validate.js");
 const postsController = require("./../controllers/posts.js");
-const postsValidations = require( "./../validations/posts.js");
 const router = express.Router();
 const {authenticateJWT} = require("./../middlewares/jwtMiddleware.js");
 const uploadMiddleware = require("./../middlewares/uploadMiddleware");
