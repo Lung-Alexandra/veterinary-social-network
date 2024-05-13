@@ -2,3 +2,4 @@
 node_modules/
 prisma/schema
 .env
+coverage/

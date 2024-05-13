@@ -34,3 +34,324 @@
 {"level":"info","message":"Displayed users!"}
 {"level":"info","message":"User 73 deleted successfully!"}
 {"level":"info","message":"Displayed users!"}
+{"level":"info","message":"Login successful! 53"}
+{"level":"info","message":"Session destroyed successfully!"}
+{"level":"info","message":"Logout user!"}
+{"level":"info","message":"Login successful! 53"}
+{"level":"info"}
+{"level":"info"}
+{"level":"info"}
+{"level":"info"}
+{"level":"info"}
+{"level":"info"}
+{"level":"info"}
+{"level":"info"}
+{"level":"info"}
+{"level":"info"}
+{"level":"info","message":"User created successfully!76,test@example.com"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"User created successfully!82,test@example.com"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"User created successfully!88,test@example.com"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"User created successfully!90,test@example.com"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"User created successfully!92,test@example.com"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"User created successfully!94,test@example.com"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"User created successfully!96,test@example.com"}
+{"level":"info","message":"Login successful! 96"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"User created successfully!98,test@example.com"}
+{"level":"info","message":"Login successful! 98"}
+{"level":"info","message":"Login successful! 98"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 98"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"User created successfully!101,test@example.com"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 101"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"User created successfully!103,test@example.com"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Post 1 not found"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Post -1 not found"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Unauthorized to update this post. User 103"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Unauthorized to update this post. User 103"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Post -1 not found"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Created post 41"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Post 41 modified"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Post 1 not found"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Unauthorized to update this post. User 103"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Post 41 modified"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Post 1 not found"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Unauthorized to update this post. User 103"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Created post 43"}
+{"level":"info","message":"Login successful! 103"}
+{"level":"info","message":"Post 41 modified"}
+{"level":"info","message":"User created successfully!109,test@example.com"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 109"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 109"}
+{"level":"info","message":"Login successful! 109"}
+{"level":"info","message":"Post 1 not found"}
+{"level":"info","message":"Login successful! 109"}
+{"level":"info","message":"Unauthorized to update this post. User 109"}
+{"level":"info","message":"Login successful! 109"}
+{"level":"info","message":"Created post 44"}
+{"level":"info","message":"Login successful! 109"}
+{"level":"info","message":"Post 41 not found"}
+{"level":"info","message":"Login successful! 109"}
+{"level":"info","message":"User 109 deleted successfully!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"User created successfully!111,test@example.com"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 111"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 111"}
+{"level":"info","message":"Login successful! 111"}
+{"level":"info","message":"Post 1 not found"}
+{"level":"info","message":"Login successful! 111"}
+{"level":"info","message":"Unauthorized to update this post. User 111"}
+{"level":"info","message":"Login successful! 111"}
+{"level":"info","message":"Created post 45"}
+{"level":"info","message":"Login successful! 111"}
+{"level":"info","message":"Login successful! 111"}
+{"level":"info","message":"User 111 deleted successfully!"}
+{"level":"info","message":"User created successfully!113,test@example.com"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 113"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 113"}
+{"level":"info","message":"Login successful! 113"}
+{"level":"info","message":"Post 1 not found"}
+{"level":"info","message":"Login successful! 113"}
+{"level":"info","message":"Unauthorized to update this post. User 113"}
+{"level":"info","message":"Login successful! 113"}
+{"level":"info","message":"Created post 46"}
+{"level":"info","message":"Login successful! 113"}
+{"level":"info","message":"Login successful! 113"}
+{"level":"info","message":"User 113 deleted successfully!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"User created successfully!115,test@example.com"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 115"}
+{"level":"info","message":"User 115 deleted successfully!"}
+{"level":"info","message":"User created successfully!117,test@example.com"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 117"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 117"}
+{"level":"info","message":"Login successful! 117"}
+{"level":"info","message":"Post 1 not found"}
+{"level":"info","message":"Login successful! 117"}
+{"level":"info","message":"Unauthorized to update this post. User 117"}
+{"level":"info","message":"Login successful! 117"}
+{"level":"info","message":"Created post 47"}
+{"level":"info","message":"Login successful! 117"}
+{"level":"info","message":"Login successful! 117"}
+{"level":"info","message":"User 117 deleted successfully!"}
+{"level":"info","message":"User created successfully!119,test@example.com"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 119"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 119"}
+{"level":"info","message":"Login successful! 119"}
+{"level":"info","message":"Post 1 not found"}
+{"level":"info","message":"Login successful! 119"}
+{"level":"info","message":"Unauthorized to update this post. User 119"}
+{"level":"info","message":"Login successful! 119"}
+{"level":"info","message":"Created post 48"}
+{"level":"info","message":"Login successful! 119"}
+{"clientVersion":"5.12.1","level":"error","name":"PrismaClientValidationError"}
+{"level":"info","message":"Login successful! 119"}
+{"level":"info","message":"User 119 deleted successfully!"}
+{"level":"info","message":"User created successfully!121,test@example.com"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 121"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 121"}
+{"level":"info","message":"Login successful! 121"}
+{"level":"info","message":"Post 1 not found"}
+{"level":"info","message":"Login successful! 121"}
+{"level":"info","message":"Unauthorized to update this post. User 121"}
+{"level":"info","message":"Login successful! 121"}
+{"level":"info","message":"Created post 49"}
+{"level":"info","message":"Login successful! 121"}
+{"clientVersion":"5.12.1","level":"error","name":"PrismaClientValidationError"}
+{"level":"info","message":"Login successful! 121"}
+{"level":"info","message":"User 121 deleted successfully!"}
+{"level":"info","message":"User created successfully!123,test@example.com"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 123"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 123"}
+{"level":"info","message":"Login successful! 123"}
+{"level":"info","message":"Post 1 not found"}
+{"level":"info","message":"Login successful! 123"}
+{"level":"info","message":"Unauthorized to update this post. User 123"}
+{"level":"info","message":"Login successful! 123"}
+{"level":"info","message":"Created post 50"}
+{"level":"info","message":"Login successful! 123"}
+{"level":"info","message":"Post 50 modified"}
+{"level":"info","message":"Login successful! 123"}
+{"level":"info","message":"User 123 deleted successfully!"}
+{"level":"info","message":"User created successfully!125,test@example.com"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 125"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 125"}
+{"level":"info","message":"Login successful! 125"}
+{"level":"info","message":"Post 1 not found"}
+{"level":"info","message":"Login successful! 125"}
+{"level":"info","message":"Unauthorized to update this post. User 125"}
+{"level":"info","message":"Login successful! 125"}
+{"level":"info","message":"Created post 51"}
+{"level":"info","message":"Login successful! 125"}
+{"level":"info","message":"Post 51 modified"}
+{"level":"info","message":"Login successful! 125"}
+{"level":"info","message":"Post 51 updated successfully!"}
+{"level":"info","message":"Login successful! 125"}
+{"level":"info","message":"User 125 deleted successfully!"}
+{"level":"info","message":"User created successfully!127,test@example.com"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 127"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 127"}
+{"level":"info","message":"Login successful! 127"}
+{"level":"info","message":"Post 1 not found"}
+{"level":"info","message":"Login successful! 127"}
+{"level":"info","message":"Unauthorized to update this post. User 127"}
+{"level":"info","message":"Login successful! 127"}
+{"level":"info","message":"Created post 52"}
+{"level":"info","message":"Login successful! 127"}
+{"level":"info","message":"Post 52 modified"}
+{"level":"info","message":"Login successful! 127"}
+{"level":"info","message":"Post 52 updated successfully!"}
+{"level":"info","message":"Login successful! 127"}
+{"level":"info","message":"Post 52 deleted"}
+{"level":"info","message":"Login successful! 127"}
+{"level":"info","message":"User 127 deleted successfully!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 129"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 129"}
+{"level":"info","message":"Login successful! 129"}
+{"level":"info","message":"Post 1 not found"}
+{"level":"info","message":"Login successful! 129"}
+{"level":"info","message":"Unauthorized to update this post. User 129"}
+{"level":"info","message":"Login successful! 129"}
+{"level":"info","message":"Created post 53"}
+{"level":"info","message":"Login successful! 129"}
+{"level":"info","message":"Post 53 modified"}
+{"level":"info","message":"Login successful! 129"}
+{"level":"info","message":"Post 53 updated successfully!"}
+{"level":"info","message":"Login successful! 129"}
+{"level":"info","message":"Post 53 deleted"}
+{"level":"info","message":"Login successful! 53"}
+{"level":"info","message":"Displayed users!"}
+{"level":"info","message":"Login successful! 129"}
+{"level":"info","message":"Login successful! 129"}
+{"level":"info","message":"User 129 deleted successfully!"}
+{"level":"info","message":"User created successfully!133,test@example.com"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 133"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 133"}
+{"level":"info","message":"Login successful! 133"}
+{"level":"info","message":"Post 1 not found"}
+{"level":"info","message":"Login successful! 133"}
+{"level":"info","message":"Unauthorized to update this post. User 133"}
+{"level":"info","message":"Login successful! 133"}
+{"level":"info","message":"Created post 54"}
+{"level":"info","message":"Login successful! 133"}
+{"level":"info","message":"Post 54 modified"}
+{"level":"info","message":"Login successful! 133"}
+{"level":"info","message":"Post 54 updated successfully!"}
+{"level":"info","message":"Login successful! 133"}
+{"level":"info","message":"Post 54 deleted"}
+{"level":"info","message":"Login successful! 53"}
+{"level":"info","message":"Displayed users!"}
+{"level":"info","message":"Login successful! 133"}
+{"level":"info","message":"Login successful! 133"}
+{"level":"info","message":"User 133 deleted successfully!"}

@@ -8,4 +8,4 @@ class httpError extends Error {
   }
 }
 
-module.exports ={httpError};
+module.exports = httpError;

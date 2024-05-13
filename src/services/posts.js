@@ -51,8 +51,6 @@ const modifyPost = async (old_post, postInfo) => {
         });
     }));
 
-    // Find existing tag IDs associated with the post
-    const existingTagIds = old_post.tags.map(tag => tag.id);
 
     // Find tag IDs that need to be disconnected
     const tagsToRemove = old_post.tags.filter(tag => !tagNames.includes(tag.name));

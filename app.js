@@ -1,13 +1,10 @@
 const express = require("express");
 const nunjucks = require( 'nunjucks');
 const path = require( 'path');
-// import dotenv from "dotenv";
-// import swaggerUi from "swagger-ui-express";
-// import swaggerJsdoc from "swagger-jsdoc";
 const routes = require( "./src/routes/index.js");
 
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 let app = express();
 
@@ -23,8 +20,10 @@ app.set('view engine', 'njk');
 app.use(routes);
 
 // app.use(errorHandler);
-app.listen(port, () =>
-    console.log(
-        `Server adresa http://localhost:${port}`
-    )
-);
+// app.listen(port, () =>
+//     console.log(
+//         `Server adresa http://localhost:${port}`
+//     )
+// );
+
+module.exports = { app };

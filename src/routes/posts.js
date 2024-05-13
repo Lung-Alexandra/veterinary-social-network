@@ -13,7 +13,6 @@ router.route('/').get( authenticateJWT, async (req, res) => {
 });
 router.route('/').post( authenticateJWT, upload.single('imagePath'),postsController.createPost);
 
-//validate(postsValidations.updatePost)
 // Read a specific post by ID
 router.route("/:id").get( authenticateJWT, upload.single('imagePath'),postsController.getPost);
 
