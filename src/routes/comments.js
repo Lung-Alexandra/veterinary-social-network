@@ -1,6 +1,6 @@
 const express = require("express");
 const commentsController = require("./../controllers/comments.js");
-const validateComment = require("./../middlewares/validatePost.js");
+const validateComment = require("./../middlewares/validateComment.js");
 
 const {authenticateJWT} = require("../middlewares/jwtMiddleware");
 
