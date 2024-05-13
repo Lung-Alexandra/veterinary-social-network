@@ -19,11 +19,10 @@ app.set('view engine', 'njk');
 
 app.use(routes);
 
-// app.use(errorHandler);
-// app.listen(port, () =>
-//     console.log(
-//         `Server adresa http://localhost:${port}`
-//     )
-// );
+app.listen(port, () =>
+    console.log(
+        `Server adresa http://localhost:${port}`
+    )
+);
 
-module.exports = { app };
+// module.exports = { app };
