@@ -19,7 +19,7 @@ but also supports the continuous learning of veterinary professionals.
     2. User can add comments to posts.
     3. User can edit his own comments.
     4. User can edit his own profile.
-       5User can delete his own account.
+    5. User can delete his own account.
 3. Admin
     1. Admin has full access to create/edit/delete posts and comments.
     2. Admin has access to delete users.
