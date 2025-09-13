@@ -184,7 +184,7 @@ a:active {
 
 /* Special styling for auth page links */
 .auth-footer a {
-    color: var(--link-color);
+    color: var(--text-secondary);
     font-weight: 600;
     text-decoration: none;
     padding: 0.5rem 1rem;

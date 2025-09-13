@@ -35,12 +35,12 @@
             <form action="/login" method="post" class="auth-form">
                 <div class="form-group">
                     <label for="email" class="form-label">Email Address</label>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required autocomplete="email" aria-describedby="email-help">
                 </div>
                 
                 <div class="form-group">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required autocomplete="current-password" aria-describedby="password-help">
                 </div>
                 
                 <button type="submit" class="auth-submit">Sign In</button>
@@ -63,12 +63,12 @@
             </div>
 
             <div class="auth-footer">
-                <div style="display: flex; flex-direction: column; gap: 1rem; align-items: center;">
-                    <div style="text-align: center;">
+                <div class="auth-footer-content">
+                    <div class="auth-footer-text">
                         <p>Don't have an account?</p>
-                        <a href="/signup">Create an account</a>
+                        <a href="/signup" class="auth-footer-link">Create an account</a>
                     </div>
-                    <a href="/" class="btn btn-secondary" style="width: 100%; text-align: center;">
+                    <a href="/" class="auth-footer-btn">
                         ← Back to Home
                     </a>
                 </div>
