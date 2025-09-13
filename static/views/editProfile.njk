@@ -2,19 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - Veterinary Social Network</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <script src="/js/theme.js" defer></script>
 </head>
 <body>
-<form action="/user/{{user.id}}" method="POST">
-    <input type="hidden" name="_method" value="PUT">
-    <label for="name">Name:</label><br>
-    <input type="text" id="name" name="name" value="{{ user.name }}"><br>
-    <label for="email">Email:</label><br>
-    <input type="text" id="email" name="email" value="{{ user.email }}"><br>
-    <label for="bio">Bio:</label><br>
-    <textarea id="bio" name="bio">{{ user.bio if user.bio else '' }}</textarea><br>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="navbar-brand">VetNet</h1>
+                <nav class="header-nav">
+                    <button class="theme-toggle" aria-label="Toggle theme">
+                        <span class="theme-toggle-icon sun">☀️</span>
+                        <span class="theme-toggle-icon moon">🌙</span>
+                    </button>
+                    <a href="/user/{{ user.id }}" class="btn btn-secondary">Back to Profile</a>
+                </nav>
+            </div>
+        </header>
 
-    <button type="submit">Modify Profile</button>
-</form>
-<button type="submit"><a href="/">Back</a></button>
+        <main class="main-content">
+            <div class="form-container">
+                <h1 class="form-title">Edit Profile</h1>
+
+                <form action="/user/{{ user.id }}" method="POST">
+                    <input type="hidden" name="_method" value="PUT">
+                    
+                    <div class="form-group">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" id="name" name="name" class="form-control" value="{{ user.name }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bio" class="form-label">Bio</label>
+                        <textarea id="bio" name="bio" class="form-control" placeholder="Tell us about yourself..." rows="4">{{ user.bio if user.bio else '' }}</textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-lg">Update Profile</button>
+                        <a href="/user/{{ user.id }}" class="btn btn-secondary btn-lg">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
 </body>
+</html>

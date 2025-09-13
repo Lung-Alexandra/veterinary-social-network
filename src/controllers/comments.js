@@ -4,7 +4,7 @@ const {logger} = require("../utils/logger");
 const getAllComments = async (req, res, next) => {
     const postId = req.postId;
     try {
-        const comments = await commentsService.getAllComments(parseInt(postId));
+        const comments = await commentsService.getAllComments(postId);
         res.render('views/comments.njk', {
             comments: comments,
             auth: isLogin(req),
@@ -23,7 +23,7 @@ const getComment = async (req, res, next) => {
     const {commentId} = req.params;
 
     try {
-        const comment = await commentsService.getComment(parseInt(commentId));
+        const comment = await commentsService.getComment(commentId);
         if (!comment) {
             logger.info(`Comment ${commentId} not found`);
             return res.status(404).json({message: 'Comment not found'});
@@ -50,7 +50,7 @@ const createComment = async (req, res, next) => {
     const postId = req.postId;
     const {content} = req.body;
     try {
-        await commentsService.createComment(content, parseInt(postId), req.session.userId);
+        await commentsService.createComment(content, postId, req.session.userId);
         logger.info(`Created comment for ${postId}`);
         res.redirect(`/post/${postId}/comments`)
     } catch (error) {
@@ -65,7 +65,7 @@ const updateComment = async (req, res, next) => {
     const {content} = req.body;
 
     try {
-        let comment = await commentsService.getComment(parseInt(commentId));
+        let comment = await commentsService.getComment(commentId);
         if (!comment) {
             logger.info(`Comment ${commentId} not found`);
             return res.status(404).json({message: 'Comment not found'});
@@ -78,8 +78,8 @@ const updateComment = async (req, res, next) => {
         }
 
         // Update the comment
-        await commentsService.updateComment(parseInt(commentId), content);
-        logger.info(`Create comment ${id} successfully`);
+        await commentsService.updateComment(commentId, content);
+        logger.info(`Create comment ${commentId} successfully`);
         res.redirect(`/post/${postId}/comments`);
     } catch (error) {
         logger.error(error);
@@ -92,7 +92,7 @@ const deleteComment = async (req, res, next) => {
     const postId = req.postId;
     const {commentId} = req.params;
     try {
-        const comment = await commentsService.getComment(parseInt(commentId))
+        const comment = await commentsService.getComment(commentId)
         if (!comment) {
             logger.info(`Comment ${commentId} not found`);
             return res.status(404).json({message: 'Comment not found'});
@@ -105,7 +105,7 @@ const deleteComment = async (req, res, next) => {
         }
 
         // Delete the comment
-        await commentsService.deleteComment(parseInt(commentId))
+        await commentsService.deleteComment(commentId)
         logger.info( `Created comment ${comment.id} of user ${comment.authorId}`);
         res.redirect(`/post/${postId}/comments`);
     } catch (error) {

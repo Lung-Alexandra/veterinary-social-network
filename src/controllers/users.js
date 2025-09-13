@@ -3,9 +3,9 @@ const {logger} = require("../utils/logger");
 
 const getProfile = async (req, res, next)  => {
     const {id} = req.params;
-    if (req.session.userId === parseInt(id) || req.session.role === "ADMIN") {
+    if (req.session.userId === id || req.session.role === "ADMIN") {
         try {
-            const user = await usersService.getUser(parseInt(id));
+            const user = await usersService.getUser(id);
             if (!user) {
                 logger.info(`User ${id} not found`);
                 return res.status(404).json({message: 'User not found!'});
@@ -25,9 +25,9 @@ const getProfile = async (req, res, next)  => {
 const getUser = async (req, res, next) => {
 
     const {id} = req.params;
-    if (req.session.userId === parseInt(id)) {
+    if (req.session.userId === id) {
         try {
-            const user = await usersService.getUser(parseInt(id));
+            const user = await usersService.getUser(id);
             if (!user) {
                 logger.info(`User ${id} not found`);
                 return res.status(404).json({message: 'User not found!'});
@@ -48,17 +48,17 @@ const getUser = async (req, res, next) => {
 const modifyUser = async (req, res, next) => {
     const {id} = req.params;
     const {name, email, bio} = req.body;
-    if (req.session.userId === parseInt(id) || req.session.role === "ADMIN") {
+    if (req.session.userId === id || req.session.role === "ADMIN") {
         try {
-            const user = await usersService.getUser(parseInt(id))
+            const user = await usersService.getUser(id)
             if (!user) {
                 logger.info(`User ${id} not found`);
                 return res.status(404).json({message: 'User not found!'});
             }
 
-            await usersService.modifyUser(parseInt(id), name, email, bio);
+            await usersService.modifyUser(id, name, email, bio);
             if(email !== user.email) {
-                await usersService.deleteUser(parseInt(id));
+                await usersService.deleteUser(id);
             }
             logger.info(`User ${user.id} updated successfully!`);
             res.redirect(`/user/${id}`)
@@ -74,17 +74,17 @@ const modifyUser = async (req, res, next) => {
 }
 const deleteUser = async (req, res, next) => {
     const {id} = req.params;
-    if (req.session.userId === parseInt(id) || req.session.role === "ADMIN") {
+    if (req.session.userId === id || req.session.role === "ADMIN") {
         try {
-            const user = await usersService.getUser(parseInt(id));
+            const user = await usersService.getUser(id);
             if (!user) {
                 logger.info(`User ${id} not found`);
                 return res.status(404).json({message: 'User not found!'});
             }
-            await usersService.deleteUser(parseInt(id));
+            await usersService.deleteUser(id);
             logger.info(`User ${id} deleted successfully!`);
             // if user deletes his account redirect to main page
-            if (req.session.userId === parseInt(id)) {
+            if (req.session.userId === id) {
                 res.redirect(`/logout`);
             } else {
                 // if it's not user it means it's admin that delete another account

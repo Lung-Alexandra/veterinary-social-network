@@ -1081,3 +1081,171 @@
 {"level":"info","message":"User 173 updated successfully!"}
 {"level":"info","message":"Invalid email!"}
 {"level":"info","message":"Invalid email!"}
+{"level":"info","message":"User created successfully!3,bureaucrat@idk.com"}
+{"level":"info","message":"Login successful! 3"}
+{"level":"info","message":"Get profile for user 3"}
+{"level":"info","message":"Edit profile for user 3"}
+{"level":"info","message":"Get profile for user 3"}
+{"level":"info","message":"User 3 deleted successfully!"}
+{"level":"info","message":"Session destroyed successfully!"}
+{"level":"info","message":"Logout user!"}
+{"level":"info","message":"Successfully authenticated with Google Drive API! 1,alexaxyz11@gmail.com "}
+{"level":"info","message":"Created post 2"}
+{"level":"info","message":"Get profile for user 1"}
+{"level":"info","message":"Session destroyed successfully!"}
+{"level":"info","message":"Logout user!"}
+{"level":"info","message":"Successfully authenticated with Google Drive API! 1,alexaxyz11@gmail.com "}
+{"level":"info","message":"Post 2 modified"}
+{"level":"info","message":"Successfully authenticated with Google Drive API! 1,alexaxyz11@gmail.com "}
+{"level":"info","message":"Get profile for user 1"}
+{"level":"info","message":"Edit profile for user 1"}
+{"level":"info","message":"User 1 updated successfully!"}
+{"level":"info","message":"Get profile for user 1"}
+{"level":"info","message":"Successfully authenticated with Google Drive API! 1,alexaxyz11@gmail.com "}
+{"level":"info","message":"Successfully authenticated with Google Drive API! 1,alexaxyz11@gmail.com "}
+{"level":"info","message":"Successfully authenticated with Google Drive API! 1d088acd-1f63-413e-98c0-56c7277172b3,alexaxyz11@gmail.com "}
+{"level":"info","message":"Created post bbfed667-839b-479e-bb26-8008532b6104"}
+{"level":"info","message":"Unauthorized access"}
+{"level":"info","message":"Unauthorized access"}
+{"level":"info","message":"Unauthorized access"}
+{"level":"info","message":"Unauthorized access"}
+{"level":"info","message":"Successfully authenticated with Google Drive API! 1d088acd-1f63-413e-98c0-56c7277172b3,alexaxyz11@gmail.com "}
+{"level":"info","message":"Get profile for user 1d088acd-1f63-413e-98c0-56c7277172b3"}
+{"level":"info","message":"Edit profile for user 1d088acd-1f63-413e-98c0-56c7277172b3"}
+{"level":"info","message":"User 1d088acd-1f63-413e-98c0-56c7277172b3 updated successfully!"}
+{"level":"info","message":"Get profile for user 1d088acd-1f63-413e-98c0-56c7277172b3"}
+{"clientVersion":"6.15.0","level":"error","name":"PrismaClientValidationError"}
+{"clientVersion":"6.15.0","level":"error","name":"PrismaClientValidationError"}
+{"level":"info","message":"Session destroyed successfully!"}
+{"level":"info","message":"Logout user!"}
+{"level":"info","message":"User created successfully!d79a62c5-aedf-4a93-864e-84f5bab8d790,administrator@idk.com"}
+{"level":"info","message":"Login successful! d79a62c5-aedf-4a93-864e-84f5bab8d790"}
+{"level":"info","message":"Get profile for user d79a62c5-aedf-4a93-864e-84f5bab8d790"}
+{"level":"info","message":"Get profile for user d79a62c5-aedf-4a93-864e-84f5bab8d790"}
+{"level":"info","message":"Session destroyed successfully!"}
+{"level":"info","message":"Logout user!"}
+{"level":"info","message":"Login successful! d79a62c5-aedf-4a93-864e-84f5bab8d790"}
+{"level":"info","message":"Displayed users!"}
+{"level":"info","message":"Displayed users!"}
+{"level":"info","message":"Displayed users!"}
+{"level":"info","message":"User created successfully!873753df-19f4-48fe-9a41-538c4970c16c,test@example.com"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Post 1 not found"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Post 4 not found"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Created post 83977376-8f92-4691-8fd2-aecd8e4c42a1"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Post 83977376-8f92-4691-8fd2-aecd8e4c42a1 modified"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Post 83977376-8f92-4691-8fd2-aecd8e4c42a1 updated successfully!"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Post 83977376-8f92-4691-8fd2-aecd8e4c42a1 deleted"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Post -1 not found"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Post 4 not found"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Get profile for user 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Edit profile for user 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"User 873753df-19f4-48fe-9a41-538c4970c16c updated successfully!"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Unauthorized access"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"Unauthorized access"}
+{"level":"info","message":"Login successful! 873753df-19f4-48fe-9a41-538c4970c16c"}
+{"level":"info","message":"User 873753df-19f4-48fe-9a41-538c4970c16c updated successfully!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"User created successfully!652d5a42-ecec-4c41-aef1-5f6ea0f6e34d,test@example.com"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Post 1 not found"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Post 4 not found"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Created post 7c8a9cf1-4bca-4f4f-8c3d-8a52a648cd5b"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Post 7c8a9cf1-4bca-4f4f-8c3d-8a52a648cd5b modified"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Post 7c8a9cf1-4bca-4f4f-8c3d-8a52a648cd5b updated successfully!"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Post 7c8a9cf1-4bca-4f4f-8c3d-8a52a648cd5b deleted"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Post -1 not found"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Post 4 not found"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Get profile for user 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Edit profile for user 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"User 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d updated successfully!"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Unauthorized access"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"Unauthorized access"}
+{"level":"info","message":"Login successful! 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d"}
+{"level":"info","message":"User 652d5a42-ecec-4c41-aef1-5f6ea0f6e34d updated successfully!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"User created successfully!7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f,test@example.com"}
+{"level":"info","message":"Invalid password!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Error creating user!"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Post 00000000-0000-0000-0000-000000000000 not found"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Post 00000000-0000-0000-0000-000000000000 not found"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Created post c991349b-741a-4267-a729-ef188e156ab2"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Post c991349b-741a-4267-a729-ef188e156ab2 modified"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Post c991349b-741a-4267-a729-ef188e156ab2 updated successfully!"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Post c991349b-741a-4267-a729-ef188e156ab2 deleted"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Post 00000000-0000-0000-0000-000000000000 not found"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Post 00000000-0000-0000-0000-000000000000 not found"}
+{"level":"info","message":"User created successfully!7928d89b-43af-442f-91b8-96c922d47c2f,admin@test.com"}
+{"level":"info","message":"Login successful! 7928d89b-43af-442f-91b8-96c922d47c2f"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Get profile for user 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Edit profile for user 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"User 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f updated successfully!"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Unauthorized access"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"Unauthorized access"}
+{"level":"info","message":"Login successful! 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f"}
+{"level":"info","message":"User 7c0f4495-dd5a-4ad7-9297-a3b9ea2cbf3f updated successfully!"}
+{"level":"info","message":"Invalid email!"}
+{"level":"info","message":"Invalid email!"}

@@ -1,0 +1,241 @@
+/* Base styles and CSS variables */
+:root {
+    /* Veterinary-themed pastel colors */
+    --primary-color: #7fb3d3;      /* Soft blue - veterinary scrubs */
+    --secondary-color: #a8d5ba;     /* Mint green - medical equipment */
+    --accent-color: #f4a6a6;        /* Soft pink - veterinary care */
+    --success-color: #8fbc8f;        /* Sage green - healthy animals */
+    --danger-color: #b36363;        /* Dusty rose - medical alerts */
+    --warning-color: #f0d58c;       /* Cream yellow - caution */
+    --info-color: #b8d4f0;          /* Light blue - information */
+
+    
+    /* Veterinary-themed backgrounds */
+    --bg-primary: #f7f9fc;          /* Very light blue-grey */
+    --bg-secondary: #ffffff;         /* Pure white */
+    --bg-tertiary: #f0f4f8;         /* Light grey-blue */
+    --bg-card: #ffffff;             /* Clean white cards */
+    --bg-header: #ffffff;            /* Clean white header */
+    --bg-input: #ffffff;            /* Clean white inputs */
+    
+    /* Veterinary-themed text */
+    --text-primary: #2c3e50;         /* Dark blue-grey */
+    --text-secondary: #34495e;      /* Medium blue-grey */
+    --text-muted: #edeeee;          /* Soft grey */
+    --text-inverse: #ffffff;        /* White text */
+    
+    /* Veterinary-themed link colors */
+    --link-color: #161616;          /* Soft blue */
+    --link-hover-color: #405f46;    /* Darker blue */
+    --link-active-color: #4d753a;   /* Darkest blue */
+    
+    /* Veterinary-themed borders */
+    --border-color: #e1e8ed;        /* Light blue-grey */
+    --border-color-light: #f0f4f8;  /* Very light blue-grey */
+    --border-color-dark: #cbd6e0;   /* Medium blue-grey */
+    
+    /* Light theme shadows */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-lg: 0 4px 8px rgba(0,0,0,0.15);
+    --shadow-xl: 0 8px 16px rgba(0,0,0,0.2);
+    
+    /* Common properties */
+    --border-radius: 8px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    --font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+    /* Grey/black theme colors */
+    --primary-color: #8598ca;        /* Medium grey */
+    --secondary-color: #4e5c6b;      /* Light grey */
+    --accent-color: #c5c9cf;         /* Very light grey */
+    --success-color: #70a175;        /* Green for success */
+    --danger-color: #c95555;         /* Red for danger */
+    --warning-color: #dead55;        /* Orange for warning */
+    --info-color: #769cd9;          /* Blue for info */
+    
+    /* Dark grey/black backgrounds */
+    --bg-primary: #111d27;           /* Very dark grey */
+    --bg-secondary: #1f2937;         /* Dark grey */
+    --bg-tertiary: #374151;          /* Medium dark grey */
+    --bg-card: #35414e;              /* Dark grey cards */
+    --bg-header: #1f2937;            /* Dark grey header */
+    --bg-input: #374151;             /* Medium dark grey inputs */
+    
+    /* Dark theme text */
+    --text-primary: #fff8f2;         /* Almost white */
+    --text-secondary: #fef7f2;       /* Light grey */
+    --text-muted: #fefefe;           /* Medium grey */
+    --text-inverse: #232b3d;         /* Dark grey */
+    
+    /* Dark theme link colors */
+    --link-color: #2b2b2b;           /* Light grey */
+    --link-hover-color: #d1d5db;     /* Very light grey */
+    --link-active-color: #f3f4f6;    /* Almost white */
+    
+    /* Dark theme borders */
+    --border-color: #65707d;         /* Medium dark grey */
+    --border-color-light: #4b5563;   /* Medium grey */
+    --border-color-dark: #1f2937;    /* Dark grey */
+    
+    /* Dark theme shadows */
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow: 0 2px 4px rgba(0,0,0,0.4);
+    --shadow-lg: 0 4px 8px rgba(0,0,0,0.5);
+    --shadow-xl: 0 8px 16px rgba(0,0,0,0.6);
+}
+
+/* Dark theme body background */
+[data-theme="dark"] body {
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: var(--text-primary);
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    min-height: 100vh;
+    transition: var(--transition);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+h1 { font-size: var(--font-size-3xl); }
+h2 { font-size: var(--font-size-2xl); }
+h3 { font-size: var(--font-size-xl); }
+
+p {
+    margin-bottom: 1rem;
+}
+
+/* Links */
+a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+a:hover {
+    color: var(--link-hover-color);
+    text-decoration: underline;
+    text-shadow: 0 0 8px rgba(96, 165, 250, 0.3);
+}
+
+a:active {
+    color: var(--link-active-color);
+}
+
+/* Enhanced link visibility for glass backgrounds */
+.glass a,
+.card-glossy a,
+.auth-card a {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: 600;
+    position: relative;
+}
+
+.glass a:hover,
+.card-glossy a:hover,
+.auth-card a:hover {
+    color: var(--link-hover-color);
+    text-decoration: none;
+    text-shadow: 0 0 12px rgba(96, 165, 250, 0.5);
+}
+
+/* Special styling for auth page links */
+.auth-footer a {
+    color: var(--link-color);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    background: rgba(96, 165, 250, 0.1);
+    border: 1px solid rgba(96, 165, 250, 0.2);
+    transition: var(--transition);
+}
+
+.auth-footer a:hover {
+    background: rgba(96, 165, 250, 0.2);
+    border-color: rgba(96, 165, 250, 0.3);
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(96, 165, 250, 0.2);
+}
+
+/* Utility classes */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+.mb-4 { margin-bottom: 1.5rem; }
+.mb-5 { margin-bottom: 3rem; }
+
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 1rem; }
+.mt-4 { margin-top: 1.5rem; }
+.mt-5 { margin-top: 3rem; }
+
+.d-none { display: none; }
+.d-block { display: block; }
+.d-flex { display: flex; }
+.d-grid { display: grid; }
+
+.flex-row { flex-direction: row; }
+.flex-column { flex-direction: column; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+.justify-evenly { justify-content: space-evenly; }
+.align-center { align-items: center; }
+.align-start { align-items: flex-start; }
+.align-end { align-items: flex-end; }
+
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 1rem; }
+.gap-4 { gap: 1.5rem; }
+.gap-5 { gap: 3rem; }

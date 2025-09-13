@@ -2,13 +2,20 @@
   "main": "app.js",
   "scripts": {
     "test": "jest",
-    "start": "nodemon app.js"
+    "test:coverage": "jest --coverage",
+    "start": "nodemon app.js",
+    "seed": "node prisma/seed.js"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   },
   "jest": {
     "testEnvironment": "node"
   },
   "dependencies": {
     "@prisma/client": "^6.15.0",
+    "@prisma/generator-helper": "^6.15.0",
+    "@prisma/internals": "^6.15.0",
     "@prisma/studio": "^0.500.0",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",

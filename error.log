@@ -6,3 +6,5 @@
 {"clientVersion":"5.12.1","code":"P2002","level":"error","meta":{"modelName":"User","target":["email"]},"name":"PrismaClientKnownRequestError"}
 {"clientVersion":"5.12.1","code":"P2002","level":"error","meta":{"modelName":"User","target":["email"]},"name":"PrismaClientKnownRequestError"}
 {"clientVersion":"5.12.1","code":"P2002","level":"error","meta":{"modelName":"User","target":["email"]},"name":"PrismaClientKnownRequestError"}
+{"clientVersion":"6.15.0","level":"error","name":"PrismaClientValidationError"}
+{"clientVersion":"6.15.0","level":"error","name":"PrismaClientValidationError"}

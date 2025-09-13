@@ -58,7 +58,7 @@ const modifyPost = async (old_post, postInfo) => {
     // Disconnect tags from the post
     await Promise.all(tagsToRemove.map(async tagToRemove => {
         return prismaClient.post.update({
-            where: { id: parseInt(id) },
+            where: { id: id },
             data: {
                 tags: { disconnect: { id: tagToRemove.id } }
             }
@@ -66,7 +66,7 @@ const modifyPost = async (old_post, postInfo) => {
     }));
 
     return prismaClient.post.update({
-        where: { id: parseInt(id) },
+        where: { id: id },
         data: {
             title,
             content,

@@ -2,89 +2,118 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Index</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veterinary Social Network</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    <script src="/js/theme.js" defer></script>
 </head>
 <body>
-{% if auth %}
-    <div style="display: flex;flex-direction: row; justify-content: space-between;">
-        <button type="submit"><a href="/logout">Logout</a></button>
-        <button type="submit"><a href="/post">Create post</a></button>
-        {% if role == "ADMIN" %}
-            <button type="submit"><a href="/users">Users</a></button>
-        {% endif %}
-        <button type="submit"><a href="/user/{{ userId }}">View profile</a></button>
-    </div>
-{% else %}
-    <button type="submit"><a href="/login">Login</a></button>
-{% endif %}
-<form id="sortForm" method="get">
-    <select name="sortOption" onchange="this.form.submit()">
-        <option value="createdAtDesc" {% if (sortOption === 'createdAtDesc') %} selected {% endif %}>Sorteaza dupa data (descendent)
-        </option>
-        <option value="createdAtAsc" {% if (sortOption === 'createdAtAsc') %} selected {% endif %}>Sorteaza dupa data (ascendent)
-        </option>
-    </select>
-</form>
-<form id="filterForm" method="get">
-    <input type="text" name="tagFilter" placeholder="Filtrare dupa tag" oninput="delayedSubmit(this)">
-</form>
-{% if posts.length %}
-    {% for post in posts %}
-        <div style="border: 1px solid black;margin :10px;">
-            <p>Data: {{ post.createdAt.toDateString() }} {{ post.createdAt.getHours() }}
-                :{{ post.createdAt.getMinutes() }}</p>
-            <p>Author: {{ post.author.name }}</p>
-            <p>Titlu : {{ post.title }}</p>
-            {% if post.tags.length %}
-                <p>Tags:
-                    {% for tag in post.tags %}
-                        {{ tag.name }}{{ "," if not loop.last }}
-                    {% endfor %}
-                </p>
-            {% endif %}
-            <p>Continut : {{ post.content }}</p>
-            {% if post.imagePath %}
-                <img src="{{ post.imagePath }}" alt="Image" style="width: 500px; height:250px;">
-            {% endif %}
-            <div style="display: flex; flex-direction: row;justify-content: space-evenly">
-                <form action="/post/{{ post.id }}/comments" method="get">
-                    <button type="submit">View comments</button>
-                </form>
-                {% if auth %}
-                    <form action="/post/{{ post.id }}/comment" method="get">
-                        <button type="submit">Add comment</button>
-                    </form>
-                    {% if userId == post.authorId or role == "ADMIN" %}
-                        <form action="/post/{{ post.id }}" method="get">
-                            <button type="submit">Edit post</button>
-                        </form>
-                        <form action="/post/{{ post.id }}" method="post">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit">Delete post</button>
-                        </form>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div>
+                <h1 class="navbar-brand gradient-text">VetNet</h1>
+                </div>
+                <nav class="header-nav">
+                    <button class="theme-toggle" aria-label="Toggle theme">
+                        <span class="theme-toggle-icon sun">☀️</span>
+                        <span class="theme-toggle-icon moon">🌙</span>
+                    </button>
+                    {% if auth %}
+                        <a href="/post" class="btn btn-primary">Create Post</a>
+                        {% if role == "ADMIN" %}
+                            <a href="/users" class="btn btn-secondary">Users</a>
+                        {% endif %}
+                        <a href="/user/{{ userId }}" class="btn btn-secondary">Profile</a>
+                        <a href="/logout" class="btn btn-danger">Logout</a>
+                    {% else %}
+                        <a href="/login" class="btn btn-primary">Login</a>
+                        <a href="/signup" class="btn btn-secondary">Sign Up</a>
                     {% endif %}
-                {% endif %}
+                </nav>
             </div>
-        </div>
-    {% endfor %}
-    {% if totalPages > 1 %}
-        <div style="text-align: center;">
-            <p>
-                Pagina {{ currentPage }} din {{ totalPages }}
-            </p>
-            {% if currentPage > 1 %}
-                <a href="?page={{ currentPage - 1 }}{% if sortOption %}&sortOption={{ sortOption }}{% endif %}{% if authorFilter %}&authorFilter={{ authorFilter }}{% endif %}">Pagina
-                    anterioară</a>
+        </header>
+        <main class="main-content">
+            <section class="filters-section glass animate-fade-in">
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <label for="sortOption" class="form-label">Sort by:</label>
+                        <form id="sortForm" method="get">
+                            <select name="sortOption" id="sortOption" class="form-control" onchange="this.form.submit()">
+                                <option value="createdAtDesc" {% if (sortOption === 'createdAtDesc') %} selected {% endif %}>Date (Newest First)</option>
+                                <option value="createdAtAsc" {% if (sortOption === 'createdAtAsc') %} selected {% endif %}>Date (Oldest First)</option>
+                            </select>
+                        </form>
+                    </div>
+                    <div class="filter-group">
+                        <label for="tagFilter" class="form-label">Filter by tag:</label>
+                        <form id="filterForm" method="get">
+                            <input type="text" name="tagFilter" id="tagFilter" class="form-control" placeholder="Enter tag name..." oninput="delayedSubmit(this)">
+                        </form>
+                    </div>
+                </div>
+            </section>
+            {% if posts.length %}
+                <div class="posts-grid">
+                    {% for post in posts %}
+                        <article class="post-card card-glossy hover-lift animate-scale-in stagger-{{ loop.index % 5 + 1 }}">
+                            <div class="post-header">
+                                <div class="post-meta">
+                                    <span class="post-date">{{ post.createdAt.toDateString() }} at {{ post.createdAt.getHours() }}:{{ post.createdAt.getMinutes() }}</span>
+                                    <span class="post-author">by {{ post.author.name }}</span>
+                                </div>
+                                <h2 class="post-title">{{ post.title }}</h2>
+                            </div>
+                            <div class="post-body">
+                                {% if post.tags.length %}
+                                    <div class="post-tags">
+                                        {% for tag in post.tags %}
+                                            <span class="badge badge-primary">{{ tag.name }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="post-content">{{ post.content }}</div>
+                                {% if post.imagePath %}
+                                    <img src="{{ post.imagePath }}" alt="Post image" class="post-image">
+                                {% endif %}
+                            </div>
+                            <div class="post-actions">
+                                <a href="/post/{{ post.id }}/comments" class="btn btn-sm btn-secondary">View Comments</a>
+                                {% if auth %}
+                                    <a href="/post/{{ post.id }}/comment" class="btn btn-sm btn-primary">Add Comment</a>
+                                    {% if userId == post.authorId or role == "ADMIN" %}
+                                        <a href="/post/{{ post.id }}" class="btn btn-sm btn-warning">Edit Post</a>
+                                        <form action="/post/{{ post.id }}" method="post" style="display: inline;">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this post?')">Delete</button>
+                                        </form>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+                {% if totalPages > 1 %}
+                    <div class="pagination">
+                        <span class="current">Page {{ currentPage }} of {{ totalPages }}</span>
+                        {% if currentPage > 1 %}
+                            <a href="?page={{ currentPage - 1 }}{% if sortOption %}&sortOption={{ sortOption }}{% endif %}{% if authorFilter %}&authorFilter={{ authorFilter }}{% endif %}">Previous</a>
+                        {% endif %}
+                        {% if currentPage < totalPages %}
+                            <a href="?page={{ currentPage + 1 }}{% if sortOption %}&sortOption={{ sortOption }}{% endif %}{% if authorFilter %}&authorFilter={{ authorFilter }}{% endif %}">Next</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="text-center">
+                    <p class="alert alert-info">No posts found. Be the first to create a post!</p>
+                </div>
             {% endif %}
-            {% if currentPage < totalPages %}
-                <a href="?page={{ currentPage + 1 }}{% if sortOption %}&sortOption={{ sortOption }}{% endif %}{% if authorFilter %}&authorFilter={{ authorFilter }}{% endif %}">Pagina
-                    următoare</a>
-            {% endif %}
-        </div>
-    {% endif %}
-{% else %}
-    <p>No post found</p>
-{% endif %}
+        </main>
+    </div>
 
 <script>
     let timeoutId;
@@ -93,7 +122,7 @@
         clearTimeout(timeoutId);
         timeoutId = setTimeout(() => {
             input.form.submit();
-        }, 500); // Amânare de 500 milisecunde (0.5 secunde)
+        }, 500);
     }
 </script>
 </body>

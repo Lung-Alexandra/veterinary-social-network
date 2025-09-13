@@ -2,56 +2,92 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Post</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if method %}Edit Post{% else %}Create Post{% endif %} - Veterinary Social Network</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    <script src="/js/theme.js" defer></script>
 </head>
 <body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="navbar-brand gradient-text">VetNet</h1>
+                <nav class="header-nav">
+                    <button class="theme-toggle" aria-label="Toggle theme">
+                        <span class="theme-toggle-icon sun">☀️</span>
+                        <span class="theme-toggle-icon moon">🌙</span>
+                    </button>
+                    <a href="/" class="btn btn-secondary">Back to Posts</a>
+                </nav>
+            </div>
+        </header>
 
-{% if method %}
-<h1>Modify Post</h1>
-<form action="/post/{{ post.id }}" method="POST" enctype="multipart/form-data">
-    {% else %}
-    <h1>Create a New Post</h1>
-    <form action="/post" method="POST" enctype="multipart/form-data">
-        {% endif %}
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" placeholder="Enter title"
-               value="{{ post.title if post else '' }}"><br>
-        <label for="tags">Tags:</label>
-        <input type="text" id="tags" name="tags" placeholder="Enter tags separated by comma"
-               value="{% if post.tags.length %}{% for tag in post.tags %}{{ tag.name }}{{ ',' if not loop.last }}{% endfor %}{% endif %}"><br>
-        <label for="content">Content:</label><br>
-        <textarea id="content" name="content">{{ post.content if post else '' }}</textarea><br>
-        <label for="type">Type:</label><br>
-        <select id="type" name="type">
-            <option value="TEXT" {% if post.type == "TEXT" %}selected{% endif %}>Text</option>
-            <option value="TEXTIMAGE" {% if post.type == "TEXTIMAGE" %}selected{% endif %}>Text + Image</option>
-        </select><br>
+        <main class="main-content">
+            <div class="form-container glass animate-fade-in">
+                <h1 class="form-title">
+                    {% if method %}Edit Post{% else %}Create New Post{% endif %}
+                </h1>
 
-        <label for="imagePath" {% if method and post.type == "TEXT" %}style="display: none"{% endif %}>Image:</label><br>
-        <input type="file" id="imagePath" name="imagePath" {% if method and post.type == "TEXT" %}style="display: none"{% endif %}><br>
+                <form action="{% if method %}/post/{{ post.id }}{% else %}/post{% endif %}" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="title" class="form-label">Post Title</label>
+                        <input type="text" id="title" name="title" class="form-control" placeholder="Enter a compelling title" value="{{ post.title if post else '' }}" required>
+                    </div>
 
-        <button type="submit">{{ "Modify Post" if method else "Create Post" }}</button>
-    </form>
-    <button type="submit"><a href="/">Back</a></button>
+                    <div class="form-group">
+                        <label for="tags" class="form-label">Tags</label>
+                        <input type="text" id="tags" name="tags" class="form-control" placeholder="Enter tags separated by commas (e.g., surgery, emergency, tips)" value="{% if post.tags.length %}{% for tag in post.tags %}{{ tag.name }}{{ ',' if not loop.last }}{% endfor %}{% endif %}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content" class="form-label">Content</label>
+                        <textarea id="content" name="content" class="form-control" placeholder="Share your veterinary insights, experiences, or questions..." rows="8" required>{{ post.content if post else '' }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="type" class="form-label">Post Type</label>
+                        <select id="type" name="type" class="form-control">
+                            <option value="TEXT" {% if not post or post.type == "TEXT" %}selected{% endif %}>Text Only</option>
+                            <option value="TEXTIMAGE" {% if post and post.type == "TEXTIMAGE" %}selected{% endif %}>Text + Image</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="imageGroup">
+                        <label for="imagePath" class="form-label">Image</label>
+                        <input type="file" id="imagePath" name="imagePath" class="form-control" accept="image/*">
+                        <small class="form-text">Upload an image to accompany your post (optional)</small>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            {% if method %}Update Post{% else %}Create Post{% endif %}
+                        </button>
+                        <a href="/" class="btn btn-secondary btn-lg">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const postType = "{{ post.type if post else '' }}";
             const typeSelect = document.getElementById('type');
-            let imageLabel = document.querySelector('label[for="imagePath"]');
-            let imagePathInput = document.getElementById('imagePath');
+            const imageGroup = document.getElementById('imageGroup');
 
-            if (postType !== "TEXTIMAGE") {
-                imageLabel.style.display = 'none';
-                imagePathInput.style.display = 'none';
+            // Hide image group initially if creating new post or if post type is TEXT
+            if (!postType || postType === "TEXT") {
+                imageGroup.style.display = 'none';
             }
 
+            // Show/hide image group based on post type selection
             typeSelect.addEventListener('change', function () {
                 if (typeSelect.value === 'TEXTIMAGE') {
-                    imageLabel.style.display = 'block';
-                    imagePathInput.style.display = 'block';
+                    imageGroup.style.display = 'block';
                 } else {
-                    imageLabel.style.display = 'none';
-                    imagePathInput.style.display = 'none';
+                    imageGroup.style.display = 'none';
                 }
             });
         });

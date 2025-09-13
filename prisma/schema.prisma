@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
+  id         String    @id @default(uuid())
   email      String    @unique
   bio        String?
   name       String
@@ -20,10 +20,10 @@ model User {
 }
 
 model Post {
-  id        Int       @id @default(autoincrement())
+  id        String    @id @default(uuid())
   title     String
   content   String
-  authorId  Int
+  authorId  String    // <- changed to String
   createdAt DateTime  @default(now())
   type      PostType
   imagePath String?
@@ -33,16 +33,16 @@ model Post {
 }
 
 model Tag {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  posts Post[] @relation("PostToTag")
+  id    String  @id @default(uuid())
+  name  String  @unique
+  posts Post[]  @relation("PostToTag")
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   content   String
-  authorId  Int
-  postId    Int
+  authorId  String   // <- changed to String
+  postId    String   // <- changed to String
   createdAt DateTime @default(now())
   author    User     @relation(fields: [authorId], references: [id])
   post      Post     @relation(fields: [postId], references: [id])

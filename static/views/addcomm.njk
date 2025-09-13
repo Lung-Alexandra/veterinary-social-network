@@ -2,19 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add comment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if method %}Edit Comment{% else %}Add Comment{% endif %} - Veterinary Social Network</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <script src="/js/theme.js" defer></script>
 </head>
 <body>
-{% if method %}
-<h1>Modify Comment</h1>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1 class="navbar-brand">VetNet</h1>
+                <nav class="header-nav">
+                    <button class="theme-toggle" aria-label="Toggle theme">
+                        <span class="theme-toggle-icon sun">☀️</span>
+                        <span class="theme-toggle-icon moon">🌙</span>
+                    </button>
+                    <a href="/" class="btn btn-secondary">Back to Posts</a>
+                </nav>
+            </div>
+        </header>
 
-{% else %}
-<h1>Create a Comment</h1>
-{% endif %}
-<form action="/post/{{postId}}/comment/{{comment.id}}" method="POST">
+        <main class="main-content">
+            <div class="form-container">
+                <h1 class="form-title">
+                    {% if method %}Edit Comment{% else %}Add New Comment{% endif %}
+                </h1>
 
-    <textarea name="content" placeholder="Enter your comment" >{{ comment.content if comment else '' }}</textarea>
-    <button type="submit">Submit</button>
-</form>
-<button type="submit"><a href="/">Back</a></button>
+                <form action="/post/{{ postId }}/comment/{{ comment.id }}" method="POST">
+                    <div class="form-group">
+                        <label for="content" class="form-label">Comment</label>
+                        <textarea id="content" name="content" class="form-control" placeholder="Share your thoughts..." rows="6" required>{{ comment.content if comment else '' }}</textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            {% if method %}Update Comment{% else %}Post Comment{% endif %}
+                        </button>
+                        <a href="/" class="btn btn-secondary btn-lg">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
 </body>
+</html>

@@ -143,7 +143,7 @@ app.get('/', async (req, res) => {
         const offset = (page - 1) * perPage;
         const totalCount = await prismaClient.post.count({
             where: {
-                tags: tagFilter ? { some: { name: { contains: tagFilter } } } : undefined
+                tags: tagFilter ? { some: { name: { contains: tagFilter, mode: 'insensitive' } } } : undefined
                 // author: authorFilter ? {
                 //     name: {contains: authorFilter}
                 // } : undefined
@@ -156,7 +156,7 @@ app.get('/', async (req, res) => {
                 createdAt: sortOption === 'createdAtAsc' ? 'asc' : 'desc'
             },
             where: {
-                tags: tagFilter ? { some: { name: { contains: tagFilter } } } : undefined
+                tags: tagFilter ? { some: { name: { contains: tagFilter, mode: 'insensitive' } } } : undefined
                 // author: authorFilter ? {
                 //     name: {contains: authorFilter}
                 // } : undefined

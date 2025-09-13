@@ -3,3 +3,4 @@ node_modules/
 prisma/schema
 .env
 coverage/
+prisma_commands.txt
