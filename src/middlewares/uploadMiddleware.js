@@ -1,34 +1,46 @@
 const multer = require("multer");
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const streamifier = require("streamifier");
+const path = require("path");
 const cloudinary = require("../utils/cloudinaryConfig");
-const path = require('path');
 
-
-function uploadMiddleware(folderName) {
-    const storage = new CloudinaryStorage({
-        cloudinary: cloudinary,
-        params: (req, file) => {
-            const folderPath = `${folderName.trim()}`; // Update the folder path here
-            const fileExtension = path.extname(file.originalname).substring(1);
-            const publicId = `${file.fieldname}-${Date.now()}`;
-
-            return {
-                folder: folderPath,
-                public_id: publicId,
-                format: fileExtension,
-            };
-        },
-    });
-
-    return multer({
-        storage: storage,
+function uploadToCloudinary(folderName = "default-folder", fieldName = "file") {
+    const upload = multer({
+        storage: multer.memoryStorage(),
         fileFilter(req, file, cb) {
-            if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-                return cb(new Error('Please upload a valid image file'))
+            if (!file.originalname.match(/\.(jpg|jpeg|png)$/i)) {
+                return cb(new Error("Please upload a valid image file"));
             }
-            cb(undefined, true)
+            cb(null, true);
+        },
+        limits: {
+            fileSize: 5 * 1024 * 1024 // 5MB limit
         }
     });
+
+    return [
+        upload.single(fieldName),
+        (req, res, next) => {
+            if (!req.file) return next();
+
+            const fileExt = path.extname(req.file.originalname).substring(1);
+            const publicId = `${fieldName}-${Date.now()}`;
+
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    folder: folderName.trim(),
+                    public_id: publicId,
+                    resource_type: "image",
+                },
+                (err, result) => {
+                    if (err) return next(err);
+                    req.uploadResult = result;
+                    next();
+                }
+            );
+
+            streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
+        }
+    ];
 }
 
-module.exports = uploadMiddleware;
+module.exports = uploadToCloudinary;
